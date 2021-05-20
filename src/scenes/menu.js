@@ -32,7 +32,7 @@ class Menu extends Phaser.Scene {
         }
 
         this.optionsConfig = {
-            fontFamily: 'Georgia',
+            fontFamily: 'Cormorant Garamond',
             fontSize: '30px',
             color: '#ffffff',
             align: 'right',
@@ -58,23 +58,25 @@ class Menu extends Phaser.Scene {
         this.transitionTitleText();
 
         // Nested delay calls, because I can.
-        // First, call play text.
-        this.transitionOptionText(this.play);
-
         // Have an increase in delay for 20 seconds for every option from the levels, tutorial, and credits.
-        this.time.delayedCall(20, () => {
-            this.transitionOptionText(this.levels);
+        this.time.delayedCall(50, () => {
+            this.transitionOptionText(this.play);
 
             this.time.delayedCall(20, () => {
-                this.transitionOptionText(this.tutorial);
-
+                this.transitionOptionText(this.levels);
+    
                 this.time.delayedCall(20, () => {
-                    this.transitionOptionText(this.credits);
+                    this.transitionOptionText(this.tutorial);
+    
+                    this.time.delayedCall(20, () => {
+                        this.transitionOptionText(this.credits);
+                    }, null, this);
+    
                 }, null, this);
-
+    
             }, null, this);
-
         }, null, this);
+        
     }
 
     transitionTitleText() {
