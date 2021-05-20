@@ -1,3 +1,4 @@
+// Initialize the game's configuration.
 let config = {
     type: Phaser.CANVAS,
     width: 780,
@@ -6,7 +7,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false
+            debug: true
         }
     }
 }

@@ -37,7 +37,7 @@ class Intro extends Phaser.Scene {
             this.playSoundHide();
         }, null, this);
         this.loadMainMenu = this.time.delayedCall(3400, () => {
-            this.scene.start("menuScene");
+            this.scene.start("menu");
         }, null, this);
     }
     playSoundText() {
