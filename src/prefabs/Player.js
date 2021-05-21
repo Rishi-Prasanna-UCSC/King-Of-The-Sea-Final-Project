@@ -9,19 +9,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(){
-        if (keyW.isDown){
+        if (UP.isDown){
+            console.log("up");
             this.y -= this.movementSpeed;
         }
-        if (keyS.isDown){
+        if (DOWN.isDown){
+            console.log("down");
             this.y += this.movementSpeed;
         }
-        if (keyA.isDown){
+        if (LEFT.isDown){
+            console.log("left");
             this.x -= this.movementSpeed;
         }
-        if (keyD.isDown){
+        if (RIGHT.isDown){
+            console.log("right");
             this.x += this.movementSpeed;
         }
 
-        
+
     }
 }
