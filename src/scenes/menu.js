@@ -71,6 +71,13 @@ class Menu extends Phaser.Scene {
         this.levels = this.add.text(900, 160, 'LEVELS', this.optionsConfig);
         this.tutorial = this.add.text(900, 240, 'TUTORIAL', this.optionsConfig);
         this.credits = this.add.text(900, 320, 'CREDITS', this.optionsConfig);
+
+        this.play.setInteractive();
+        this.levels.setInteractive();
+
+        this.levels.on('pointerdown', () => {
+            this.scene.start("levelSelection");
+        });
     }
 
     update() {
