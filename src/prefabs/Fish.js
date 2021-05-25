@@ -5,4 +5,8 @@ class Fish extends Player {
         scene.physics.add.existing(this);
 
     }
+
+    update(){
+        
+    }
 }

@@ -21,7 +21,7 @@ class Menu extends Phaser.Scene {
         });
         
         this.load.on('complete', function() {
-            console.log('complete');
+            // console.log('complete');
             bar.destroy();
             box.destroy();
         });
