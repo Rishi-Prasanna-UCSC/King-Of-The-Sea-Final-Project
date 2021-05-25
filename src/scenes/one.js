@@ -17,7 +17,9 @@ class One extends Phaser.Scene {
         RIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
         //creating player
-        this.p1Fish = new Player(this, 100, 340, "spider");
+        this.p1Fish = new Fish(this, 100, 340, "spider");
+
+        this.enemy = new Enemy(this, 300, 340, "spider");
 
         //creates pause button
         this.pause = this.add.image(720, 50, 'Pause');
@@ -32,5 +34,9 @@ class One extends Phaser.Scene {
 
     update(){
         this.p1Fish.update();
+
+        if (this.p1Fish.checkCollision(this.enemy)){
+            console.log("game over");
+        }
     }
 }
