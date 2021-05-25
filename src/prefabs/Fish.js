@@ -6,7 +6,7 @@ class Fish extends Player {
 
     }
 
-    update(){
+    // update(){
         
-    }
+    // }
 }
