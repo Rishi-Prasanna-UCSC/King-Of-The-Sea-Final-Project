@@ -35,23 +35,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.y + this.height > enemy.y &&
             this.y < enemy.y + enemy.height) {
 
-            // player.reset();
-
-            // enemy.alpha = 0;
-            // let boom = this.add.sprite(enemy.x,
-            //     enemy.y, 'explosion').setOrigin(0, 0);
-            // boom.anims.play('explode');
-            // boom.on('animationcomplete', () => {    // callback after anim completes
-            //     enemy.reset();                         // reset ship position
-            //     boom.destroy();                       // remove explosion sprite
-            // });
-            // this.sound.play('sfx_explosion');
-
-            // this.p1Score += ship.points;
-            // this.scoreLeft.text = this.p1Score;
-            // console.log(ship.points);
-
-            // console.log("yee yee")
             return true;
         }
     }

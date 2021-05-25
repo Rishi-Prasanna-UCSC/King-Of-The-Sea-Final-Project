@@ -4,7 +4,5 @@ class Fish extends Player {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        this.movementSpeed = 4;
-
     }
 }

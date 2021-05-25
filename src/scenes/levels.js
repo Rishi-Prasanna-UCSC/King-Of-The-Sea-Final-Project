@@ -14,16 +14,54 @@ class Levels extends Phaser.Scene {
     }
 
     create() {
+        this.one = this.add.image(100, 220, 'Lv01');
+        this.two = this.add.image(155, 220, 'Lv02');
+        this.three = this.add.image(210, 220, 'Lv03');
+        this.four = this.add.image(265, 220, 'Lv04');
+        this.five = this.add.image(320, 220, 'Lv05');
+        
+
         let levels = [];
-        levels.push(this.add.image(100, 220, 'Lv01'));
-        levels.push(this.add.image(155, 220, 'Lv02'));
-        levels.push(this.add.image(210, 220, 'Lv03'));
-        levels.push(this.add.image(265, 220, 'Lv04'));
-        levels.push(this.add.image(320, 220, 'Lv05'));
+        levels.push(this.one);
+        levels.push(this.two);
+        levels.push(this.three);
+        levels.push(this.four);
+        levels.push(this.five);
 
         for (let level of levels) {
             level.setScale(0.5);
         }
+        this.one.setInteractive();
+        this.two.setInteractive();
+        this.three.setInteractive();
+        this.four.setInteractive();
+        this.five.setInteractive();
+
+
+        this.one.on("pointerdown", () => {
+            this.scene.start("levelOne");
+
+        });
+
+        this.two.on("pointerdown", () => {
+            this.scene.start("levelTwo");
+
+        });
+
+        this.three.on("pointerdown", () => {
+            this.scene.start("levelThree");
+
+        });
+
+        this.four.on("pointerdown", () => {
+            this.scene.start("levelFour");
+
+        });
+
+        this.five.on("pointerdown", () => {
+            this.scene.start("levelFive");
+
+        });
 
     }
 
