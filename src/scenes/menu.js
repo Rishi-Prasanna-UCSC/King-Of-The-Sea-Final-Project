@@ -6,6 +6,7 @@ class Menu extends Phaser.Scene {
     preload() {
         // Main Menu Music.
         this.load.audio('MMMusic', 'assets/music/KingOfTheSeaScoreMainMenu.wav');
+        this.load.image('MMBackground', 'assets/art/MMBackground.png');
 
         // Note: Created loading screen with a bit of help from this resource:
         // https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/
@@ -28,6 +29,9 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
+        // Initialize background.
+        let bg = this.add.image(widthScreen / 2, heightScreen / 2, 'MMBackground');
+
         // Initialize music.
         let music = this.sound.add('MMMusic');
         music.setLoop(true);
@@ -54,6 +58,7 @@ class Menu extends Phaser.Scene {
             fontFamily: 'Cormorant Garamond',
             fontSize: '30px',
             color: '#ffffff',
+            backgroundColor: '#000000',
             align: 'right',
             padding: {
                 top: 5,
