@@ -111,7 +111,7 @@ class Menu extends Phaser.Scene {
         this.transitionTitleText();
 
         this.bubbleGracePeriod += 1;
-        if (this.bubbleGracePeriod % 100 == 0) {
+        if (this.bubbleGracePeriod % 200 == 0) {
             // console.log(this.bubbleGracePeriod);
             let min = 1;
             let max = 4;
