@@ -11,6 +11,7 @@ class Menu extends Phaser.Scene {
         // Bubbles.
         this.load.image('B01', 'assets/sprites/bubble01.png');
         this.load.image('B02', 'assets/sprites/bubble02.png');
+        this.load.image('B03', 'assets/sprites/bubble03.png');
 
         // Note: Created loading screen with a bit of help from this resource:
         // https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/
@@ -68,7 +69,7 @@ class Menu extends Phaser.Scene {
             fontFamily: 'Cormorant Garamond',
             fontSize: '30px',
             color: '#ffffff',
-            backgroundColor: '#000000',
+            backgroundColor: 'rgba(0,0,0,0.7)',
             align: 'right',
             padding: {
                 top: 5,
@@ -113,31 +114,35 @@ class Menu extends Phaser.Scene {
         if (this.bubbleGracePeriod % 100 == 0) {
             // console.log(this.bubbleGracePeriod);
             let min = 1;
-            let max = 3;
+            let max = 4;
             let rand = Math.floor(Math.random() * (max - min) + min);
 
             let bubble;
             switch (rand) {
                 case 1:
-                    console.log(1);
                     bubble = this.physics.add.sprite(
                         Math.random() * widthScreen,
                         heightScreen,
                         'B01');
+                    bubble.setScale(0.2);
                     break;
                 case 2:
-                    console.log(2);
                     bubble = this.physics.add.sprite(
                         Math.random() * widthScreen,
                         heightScreen,
                         'B02');
+                    bubble.setScale(0.5);
+                    break;
+                case 3:
+                    bubble = this.physics.add.sprite(
+                        Math.random() * widthScreen,
+                        heightScreen,
+                        'B03');
+                    bubble.setScale(0.5);
                     break;
             }
-
-            bubble.setScale(0.25, 0.25);
             this.bubble01Group.add(bubble);
             bubble.setVelocityY(-50);
-            bubble.setScale(0.3);
             bubble.body.immovable = false;
             bubble.body.allowGravity = false;
         }
