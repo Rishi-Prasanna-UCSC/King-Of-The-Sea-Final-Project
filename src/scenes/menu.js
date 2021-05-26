@@ -4,9 +4,13 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-        // Main Menu Music.
+        // Main Menu Music and BG.
         this.load.audio('MMMusic', 'assets/music/KingOfTheSeaScoreMainMenu.wav');
         this.load.image('MMBackground', 'assets/art/MMBackground.png');
+
+        // Bubbles.
+        this.load.image('B01', 'assets/sprites/bubble01.png');
+        this.load.image('B02', 'assets/sprites/bubble02.png');
 
         // Note: Created loading screen with a bit of help from this resource:
         // https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/
@@ -32,10 +36,16 @@ class Menu extends Phaser.Scene {
         // Initialize background.
         let bg = this.add.image(widthScreen / 2, heightScreen / 2, 'MMBackground');
 
+        this.bubbleGracePeriod = -1;
+
         // Initialize music.
         let music = this.sound.add('MMMusic');
         music.setLoop(true);
         music.play();
+
+        this.bubble01Group = this.physics.add.group();
+
+        
 
         // Initialize background.
 
@@ -92,11 +102,46 @@ class Menu extends Phaser.Scene {
         this.tutorial.on('pointerdown', () => {
             this.scene.start("tutorial");
         });
+
+
     }
 
     update() {
         this.transitionTitleText();
 
+        this.bubbleGracePeriod += 1;
+        if (this.bubbleGracePeriod % 100 == 0) {
+            // console.log(this.bubbleGracePeriod);
+            let min = 1;
+            let max = 3;
+            let rand = Math.floor(Math.random() * (max - min) + min);
+
+            let bubble;
+            switch (rand) {
+                case 1:
+                    console.log(1);
+                    bubble = this.physics.add.sprite(
+                        Math.random() * widthScreen,
+                        heightScreen,
+                        'B01');
+                    break;
+                case 2:
+                    console.log(2);
+                    bubble = this.physics.add.sprite(
+                        Math.random() * widthScreen,
+                        heightScreen,
+                        'B02');
+                    break;
+            }
+
+            bubble.setScale(0.25, 0.25);
+            this.bubble01Group.add(bubble);
+            bubble.setVelocityY(-50);
+            bubble.setScale(0.3);
+            bubble.body.immovable = false;
+            bubble.body.allowGravity = false;
+        }
+        
         // Nested delay calls, because I can.
         // Have an increase in delay for 20 seconds for every option from the levels, tutorial, and credits.
         this.time.delayedCall(50, () => {
