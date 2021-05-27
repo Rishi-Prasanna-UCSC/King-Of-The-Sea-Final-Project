@@ -6,9 +6,11 @@ class One extends Phaser.Scene {
     preload(){
         this.load.image('spider', 'assets/art/Spider.png'); //debug
         this.load.image('Pause', 'assets/art/PauseButton.png');
+        this.load.image('BG', 'assets/art/PlayBackground.png');
     }
 
     create(){
+        this.add.image(0, 0, 'BG');
 
         //Key Controls
         UP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);

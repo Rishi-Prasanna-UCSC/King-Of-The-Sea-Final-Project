@@ -35,7 +35,7 @@ class Menu extends Phaser.Scene {
 
     create() {
         // Initialize background.
-        let bg = this.add.image(widthScreen / 2, heightScreen / 2, 'MMBackground');
+        this.add.image(widthScreen / 2, heightScreen / 2, 'MMBackground');
 
         this.bubbleGracePeriod = -1;
 
@@ -44,7 +44,7 @@ class Menu extends Phaser.Scene {
         music.setLoop(true);
         music.play();
 
-        this.bubble01Group = this.physics.add.group();
+        this.bubbleGroup = this.physics.add.group();
 
         
 
@@ -141,7 +141,7 @@ class Menu extends Phaser.Scene {
                     bubble.setScale(0.5);
                     break;
             }
-            this.bubble01Group.add(bubble);
+            this.bubbleGroup.add(bubble);
             bubble.setVelocityY(-50);
             bubble.body.immovable = false;
             bubble.body.allowGravity = false;
