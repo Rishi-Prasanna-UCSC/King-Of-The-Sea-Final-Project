@@ -7,6 +7,10 @@ class One extends Phaser.Scene {
         this.load.image('spider', 'assets/art/Spider.png'); //debug
         this.load.image('Pause', 'assets/art/PauseButton.png');
         this.load.image('BG', 'assets/art/PlayBackground.png');
+
+        this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png', 
+            {frameWidth: 150, frameHeight: 271});
+
     }
 
     create(){
@@ -21,7 +25,15 @@ class One extends Phaser.Scene {
         //creating player
         this.p1Fish = new Fish(this, 100, 340, "spider");
 
-        this.enemy = new Enemy(this, 300, 340, "spider");
+        this.clam = new Enemy(this, 300, 340, "clam");
+        this.anims.create({
+            key: 'clam',
+            frames: this.anims.generateFrameNumbers('clam', {
+                start: 1, end: 4
+            }),
+            frameRate: 6
+        });
+
 
         //creates pause button
         this.pause = this.add.image(720, 50, 'Pause');
