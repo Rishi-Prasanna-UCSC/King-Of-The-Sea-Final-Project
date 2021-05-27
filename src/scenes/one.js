@@ -8,12 +8,16 @@ class One extends Phaser.Scene {
         this.load.image('Pause', 'assets/art/PauseButton.png');
         this.load.image('BG', 'assets/art/PlayBackground.png');
 
+        this.load.image('rock', 'assets/sprites/rock.png');
+
         this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png', 
             {frameWidth: 150, frameHeight: 271});
+        
 
     }
 
     create(){
+        
         this.add.image(0, 0, 'BG');
 
         //Key Controls
@@ -22,17 +26,28 @@ class One extends Phaser.Scene {
         DOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         RIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
+        //create groups
+        this.rockGroup = this.physics.add.group();
+
         //creating player
         this.p1Fish = new Fish(this, 100, 340, "spider");
+        
+
+        this.rock1 = this.add.image(500, 340, "rock");
+        this.rockGroup.add(this.rock1);
+
+        this.physics.add.collider(this.p1Fish, this.rockGroup);
 
         this.clam = new Enemy(this, 300, 340, "clam");
-        this.anims.create({
-            key: 'clam',
-            frames: this.anims.generateFrameNumbers('clam', {
-                start: 1, end: 4
-            }),
-            frameRate: 6
-        });
+        // this.anims.create({
+        //     key: 'clam',
+        //     frames: this.anims.generateFrameNumbers('clam', {
+        //         start: 1, end: 4
+        //     }),
+        //     frameRate: 6
+        // });
+
+
 
 
         //creates pause button
@@ -52,5 +67,10 @@ class One extends Phaser.Scene {
         if (this.p1Fish.checkCollision(this.enemy)){
             console.log("game over");
         }
+
+        // //rock collision
+        // touchedRock(player, rock){
+
+        // }
     }
 }
