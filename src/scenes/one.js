@@ -78,6 +78,7 @@ class One extends Phaser.Scene {
 
     update(){
         this.p1Fish.update();
+        if ()
 
         if (this.p1Fish.checkCollision(this.enemy)){
             console.log("game over");
