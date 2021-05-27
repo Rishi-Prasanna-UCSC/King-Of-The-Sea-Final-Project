@@ -4,14 +4,15 @@ class One extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('spider', 'assets/art/Spider.png'); //debug
         this.load.image('Pause', 'assets/art/PauseButton.png');
         this.load.image('BG', 'assets/art/PlayBackground.png');
 
         this.load.image('rock', 'assets/sprites/rock.png');
 
+        this.load.spritesheet('fish', 'assets/character/fishSpriteSheet.png',
+            {frameWidth: 275, frameHeight: 100});
         this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png', 
-            {frameWidth: 150, frameHeight: 271});
+            {frameWidth: 100, frameHeight: 100});
         
 
     }
@@ -30,7 +31,7 @@ class One extends Phaser.Scene {
         this.rockGroup = this.physics.add.group();
 
         //creating player
-        this.p1Fish = new Fish(this, 100, 340, "spider");
+        this.p1Fish = new Fish(this, 100, 340, "fish");
         
 
         this.rock1 = this.add.image(500, 340, "rock");
@@ -39,6 +40,20 @@ class One extends Phaser.Scene {
         this.physics.add.collider(this.p1Fish, this.rockGroup);
 
         this.clam = new Enemy(this, 300, 340, "clam");
+
+        // Running Ant Animation.
+        this.anims.create({
+            key: 'FishSwimming',
+            frames: this.anims.generateFrameNumbers('fish', {
+                start: 0, end: 1
+            }),
+            frameRate: 5,
+            repeat: -1
+        });
+        this.p1Fish.setScale(0.5);
+        this.p1Fish.anims.play('FishSwimming');
+
+
         // this.anims.create({
         //     key: 'clam',
         //     frames: this.anims.generateFrameNumbers('clam', {
