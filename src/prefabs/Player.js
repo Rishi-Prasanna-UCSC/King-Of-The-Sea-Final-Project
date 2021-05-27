@@ -30,12 +30,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     checkCollision(enemy){
-        if (this.x + this.width > enemy.x &&
-            this.x < enemy.x + enemy.width &&
-            this.y + this.height > enemy.y &&
-            this.y < enemy.y + enemy.height) {
+        // if (this.x + this.width > enemy.x &&
+        //     this.x < enemy.x + enemy.width &&
+        //     this.y + this.height > enemy.y &&
+        //     this.y < enemy.y + enemy.height) {
 
-            return true;
-        }
+        //     return true;
+        // }
     }
 }
