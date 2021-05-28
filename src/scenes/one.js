@@ -29,6 +29,7 @@ class One extends Phaser.Scene {
 
         //create groups
         this.rockGroup = this.physics.add.group();
+        this.enemiesGroup = this.physics.add.group();
 
         //creating player
         this.p1Fish = new Fish(this, 100, 340, "fish");
@@ -40,6 +41,9 @@ class One extends Phaser.Scene {
         this.physics.add.collider(this.p1Fish, this.rockGroup);
 
         this.clam = new Enemy(this, 300, 340, "clam");
+        this.enemiesGroup.add(this.clam);
+        this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
+
 
         // Running Ant Animation.
         this.anims.create({
@@ -64,7 +68,7 @@ class One extends Phaser.Scene {
         });
         this.clam.anims.play('clamOpen');
 
-
+        
 
 
         //creates pause button
@@ -90,5 +94,9 @@ class One extends Phaser.Scene {
         // touchedRock(player, rock){
 
         // }
+    }
+
+    touchedEnemy(){
+        console.log("help");
     }
 }
