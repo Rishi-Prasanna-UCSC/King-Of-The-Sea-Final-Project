@@ -54,13 +54,14 @@ class One extends Phaser.Scene {
         this.p1Fish.anims.play('FishSwimming');
 
 
-        // this.anims.create({
-        //     key: 'clam',
-        //     frames: this.anims.generateFrameNumbers('clam', {
-        //         start: 1, end: 4
-        //     }),
-        //     frameRate: 6
-        // });
+        this.anims.create({
+            key: 'clamOpen',
+            frames: this.anims.generateFrameNumbers('clam', {
+                start: 0, end: 2
+            }),
+            frameRate: 6
+        });
+        this.clam.anims.play('clamOpen');
 
 
 
@@ -78,7 +79,7 @@ class One extends Phaser.Scene {
 
     update(){
         this.p1Fish.update();
-        if ()
+        // if ()
 
         if (this.p1Fish.checkCollision(this.enemy)){
             console.log("game over");
