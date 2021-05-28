@@ -96,7 +96,7 @@ class One extends Phaser.Scene {
         // }
     }
 
-    touchedEnemy(){
+    touchedEnemy(fish, enemy){
         console.log("help");
     }
 }
