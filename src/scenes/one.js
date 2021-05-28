@@ -59,7 +59,8 @@ class One extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('clam', {
                 start: 0, end: 2
             }),
-            frameRate: 6
+            frameRate: 2.5,
+            repeat: -1
         });
         this.clam.anims.play('clamOpen');
 
