@@ -83,6 +83,12 @@ class One extends Phaser.Scene {
     }
 
     update(){
+        if (Phaser.Input.Keyboard.JustDown(LEFT)) {
+            this.p1Fish.flipX = true;
+        }
+        if (Phaser.Input.Keyboard.JustDown(RIGHT)) {
+            this.p1Fish.flipX = false;
+        }
         this.p1Fish.update();
         // if ()
 
