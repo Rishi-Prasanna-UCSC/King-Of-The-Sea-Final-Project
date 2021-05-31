@@ -41,8 +41,10 @@ class One extends Phaser.Scene {
 
         this.physics.add.collider(this.p1Fish, this.rockGroup);
 
-        this.clam = new Enemy(this, 300, 340, "clam");
-        this.enemiesGroup.add(this.clam);
+        let clam = new Enemy(this, 300, 340, "clam");
+        this.enemiesGroup.add(clam);
+        clam.body.immovable = true;
+        clam.body.allowGravity = false;
         this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
 
 
@@ -67,7 +69,7 @@ class One extends Phaser.Scene {
             frameRate: 2.5,
             repeat: 1
         });
-        this.clam.anims.play('clamOpen');
+        clam.anims.play('clamOpen');
 
         
 
@@ -99,12 +101,14 @@ class One extends Phaser.Scene {
         }
         else if (Phaser.Input.Keyboard.JustDown(UP)) {
             this.p1Fish.flipX = false;
+            this.p1Fish.body.angle = 270;
             this.p1Fish.angle = 270;
             this.p1Fish.setVelocityX(0);
             this.p1Fish.setVelocityY(-swimSpeed);
         }
         else if (Phaser.Input.Keyboard.JustDown(DOWN)) {
             this.p1Fish.flipX = false;
+            this.p1Fish.body.angle = 90;
             this.p1Fish.angle = 90;
             this.p1Fish.setVelocityX(0);
             this.p1Fish.setVelocityY(swimSpeed);
