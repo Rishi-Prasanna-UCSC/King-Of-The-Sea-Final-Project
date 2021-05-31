@@ -18,7 +18,6 @@ class One extends Phaser.Scene {
     }
 
     create(){
-        
         this.add.image(0, 0, 'BG');
 
         //Key Controls
@@ -35,8 +34,10 @@ class One extends Phaser.Scene {
         this.p1Fish = new Fish(this, 100, 340, "fish");
         
 
-        this.rock1 = this.add.image(500, 340, "rock");
-        this.rockGroup.add(this.rock1);
+        let rock1 = this.physics.add.sprite(500, 340, "rock");
+        this.rockGroup.add(rock1);
+        rock1.body.immovable = true;
+        rock1.body.allowGravity = false;
 
         this.physics.add.collider(this.p1Fish, this.rockGroup);
 
@@ -83,12 +84,32 @@ class One extends Phaser.Scene {
     }
 
     update(){
+
         if (Phaser.Input.Keyboard.JustDown(LEFT)) {
             this.p1Fish.flipX = true;
+            this.p1Fish.angle = 0;
+            this.p1Fish.setVelocityY(0);
+            this.p1Fish.setVelocityX(-swimSpeed);
         }
-        if (Phaser.Input.Keyboard.JustDown(RIGHT)) {
+        else if (Phaser.Input.Keyboard.JustDown(RIGHT)) {
             this.p1Fish.flipX = false;
+            this.p1Fish.angle = 0;
+            this.p1Fish.setVelocityY(0);
+            this.p1Fish.setVelocityX(swimSpeed);
         }
+        else if (Phaser.Input.Keyboard.JustDown(UP)) {
+            this.p1Fish.flipX = false;
+            this.p1Fish.angle = 270;
+            this.p1Fish.setVelocityX(0);
+            this.p1Fish.setVelocityY(-swimSpeed);
+        }
+        else if (Phaser.Input.Keyboard.JustDown(DOWN)) {
+            this.p1Fish.flipX = false;
+            this.p1Fish.angle = 90;
+            this.p1Fish.setVelocityX(0);
+            this.p1Fish.setVelocityY(swimSpeed);
+        }
+
         this.p1Fish.update();
         // if ()
 

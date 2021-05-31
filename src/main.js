@@ -23,3 +23,9 @@ let game = new Phaser.Game(config);
 
 // Initialize the keys used to play the game.
 let UP, DOWN, RIGHT, LEFT;
+
+// playMusic[0] = main menu music.
+// playMusic[1] = gameplay music.
+let playMusic = [false, false];
+
+let swimSpeed = 400;
