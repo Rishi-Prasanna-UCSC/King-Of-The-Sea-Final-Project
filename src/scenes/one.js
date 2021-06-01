@@ -112,10 +112,27 @@ class One extends Phaser.Scene {
         this.p1Fish.update();
         if (this.p1Fish.lifeNumChanged) {
 
+            if (this.p1Fish.lives == 3) {
+                this.heart3.destroy();
+                this.heart3 = this.add.sprite(170, 50, 'lifeH');
+                this.heart3.setScale(1.4);
+                this.heart2.destroy();
+                this.heart2 = this.add.sprite(110, 50, 'lifeH');
+                this.heart2.setScale(1.4);
+                this.heart1.destroy();
+                this.heart1 = this.add.sprite(50, 50, 'lifeH');
+                this.heart1.setScale(1.4);
+            }
             if (this.p1Fish.lives == 2) {
                 this.heart3.destroy();
                 this.heart3 = this.add.sprite(170, 50, 'lostH');
                 this.heart3.setScale(1.4);
+                this.heart2.destroy();
+                this.heart2 = this.add.sprite(110, 50, 'lifeH');
+                this.heart2.setScale(1.4);
+                this.heart1.destroy();
+                this.heart1 = this.add.sprite(50, 50, 'lifeH');
+                this.heart1.setScale(1.4);
             }
             else if (this.p1Fish.lives == 1) {
                 this.heart3.destroy();
@@ -124,8 +141,11 @@ class One extends Phaser.Scene {
                 this.heart2.destroy();
                 this.heart2 = this.add.sprite(110, 50, 'lostH');
                 this.heart2.setScale(1.4);
+                this.heart1.destroy();
+                this.heart1 = this.add.sprite(50, 50, 'lifeH');
+                this.heart1.setScale(1.4);
             }
-            else if (this.p1Fish.lives == 0) {
+            else {
                 this.heart3.destroy();
                 this.heart3 = this.add.sprite(170, 50, 'lostH');
                 this.heart3.setScale(1.4);
