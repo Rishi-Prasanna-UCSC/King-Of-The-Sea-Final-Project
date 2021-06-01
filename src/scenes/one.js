@@ -17,6 +17,9 @@ class One extends Phaser.Scene {
         // Transformation gem...probably to be used as the finish line.
         this.load.image('gemT', 'assets/sprites/TransformGem.png');
 
+        // Health gem.
+        this.load.image('gemH', 'assets/sprites/HealthGem.png');
+
         // 
         this.load.image('lifeH', 'assets/sprites/HeartIcon.png');
         this.load.image('lostH', 'assets/sprites/NotHeartIcon.png');
@@ -34,7 +37,8 @@ class One extends Phaser.Scene {
         //create groups
         this.rockGroup = this.physics.add.group();
         this.enemiesGroup = this.physics.add.group();
-        this.gemGroup = this.physics.add.group();
+        this.finGemGroup = this.physics.add.group();
+        this.helGemGroup = this.physics.add.group();
 
         //creating player
         this.p1Fish = new Fish(this, 100, 340, "fish");
@@ -52,15 +56,19 @@ class One extends Phaser.Scene {
         this.enemiesGroup.add(clam);
         clam.body.immovable = true;
         clam.body.allowGravity = false;
-        this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
 
 
         let finish = this.physics.add.sprite(700, 150, 'gemT');
-        this.gemGroup.add(finish);
-        finish.setScale(0.85);
+        this.finGemGroup.add(finish);
+        finish.setScale(0.65);
         finish.body.immovable = true;
         finish.body.allowGravity = false;
-        this.physics.add.collider(this.p1Fish, this.gemGroup);
+
+        let health = this.physics.add.sprite(300, 100, 'gemH');
+        this.helGemGroup.add(health);
+        health.setScale(0.65);
+        health.body.immovable = true;
+        health.body.allowGravity = false;
 
         // Lives.
         this.heart1 = this.add.sprite(50, 50, 'lifeH');
@@ -107,6 +115,9 @@ class One extends Phaser.Scene {
             this.scene.launch('pauseScene');
         });
         
+        this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
+        this.physics.add.collider(this.p1Fish, this.finGemGroup);
+        this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
     }
 
     update(){
@@ -146,7 +157,7 @@ class One extends Phaser.Scene {
                 this.heart1 = this.add.sprite(50, 50, 'lifeH');
                 this.heart1.setScale(1.4);
             }
-            else {
+            else if (this.p1Fish.lives == 0) {
                 this.heart3.destroy();
                 this.heart3 = this.add.sprite(170, 50, 'lostH');
                 this.heart3.setScale(1.4);
@@ -162,6 +173,14 @@ class One extends Phaser.Scene {
 
             this.p1Fish.lifeNumChanged = false;
         }
+    }
+
+    addLife(fish, gem) {
+        if (fish.lives < 3) {
+            fish.lives++;
+            fish.lifeNumChanged = true;
+        }
+        gem.destroy();
     }
 
     touchedEnemy(){
