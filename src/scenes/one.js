@@ -14,7 +14,12 @@ class One extends Phaser.Scene {
         this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png', 
             {frameWidth: 100, frameHeight: 100});
         
+        // Transformation gem...probably to be used as the finish line.
+        this.load.image('gemT', 'assets/sprites/TransformGem.png');
 
+        // 
+        this.load.image('lifeH', 'assets/sprites/HeartIcon.png');
+        this.load.image('lostH', 'assets/sprites/NotHeartIcon.png');
     }
 
     create(){
@@ -29,6 +34,7 @@ class One extends Phaser.Scene {
         //create groups
         this.rockGroup = this.physics.add.group();
         this.enemiesGroup = this.physics.add.group();
+        this.gemGroup = this.physics.add.group();
 
         //creating player
         this.p1Fish = new Fish(this, 100, 340, "fish");
@@ -48,7 +54,24 @@ class One extends Phaser.Scene {
         this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
 
 
-        // Running Ant Animation.
+        let finish = this.physics.add.sprite(700, 150, 'gemT');
+        this.gemGroup.add(finish);
+        finish.setScale(0.85);
+        finish.body.immovable = true;
+        finish.body.allowGravity = false;
+        this.physics.add.collider(this.p1Fish, this.gemGroup);
+
+        // Lives.
+        this.heart1 = this.add.sprite(50, 50, 'lifeH');
+        this.heart1.setScale(1.4);
+        this.heart2 = this.add.sprite(110, 50, 'lifeH');
+        this.heart2.setScale(1.4);
+        this.heart3 = this.add.sprite(170, 50, 'lifeH');
+        this.heart3.setScale(1.4);
+
+
+
+        // Swimming Fish Animation.
         this.anims.create({
             key: 'FishSwimming',
             frames: this.anims.generateFrameNumbers('fish', {
@@ -87,19 +110,44 @@ class One extends Phaser.Scene {
 
     update(){
         this.p1Fish.update();
-        // if ()
+        if (this.p1Fish.lifeNumChanged) {
 
-        if (this.p1Fish.checkCollision(this.enemy)){
-            console.log("game over");
+            if (this.p1Fish.lives == 2) {
+                this.heart3.destroy();
+                this.heart3 = this.add.sprite(170, 50, 'lostH');
+                this.heart3.setScale(1.4);
+            }
+            else if (this.p1Fish.lives == 1) {
+                this.heart3.destroy();
+                this.heart3 = this.add.sprite(170, 50, 'lostH');
+                this.heart3.setScale(1.4);
+                this.heart2.destroy();
+                this.heart2 = this.add.sprite(110, 50, 'lostH');
+                this.heart2.setScale(1.4);
+            }
+            else if (this.p1Fish.lives == 0) {
+                this.heart3.destroy();
+                this.heart3 = this.add.sprite(170, 50, 'lostH');
+                this.heart3.setScale(1.4);
+                this.heart2.destroy();
+                this.heart2 = this.add.sprite(110, 50, 'lostH');
+                this.heart2.setScale(1.4);
+                this.heart1.destroy();
+                this.heart1 = this.add.sprite(50, 50, 'lostH');
+                this.heart1.setScale(1.4);
+                this.p1Fish.destroy();
+            }
+
+
+            this.p1Fish.lifeNumChanged = false;
         }
-
-        // //rock collision
-        // touchedRock(player, rock){
-
-        // }
     }
 
     touchedEnemy(){
-        console.log("help");
+        if (this.p1Fish.lives > 0) {
+            this.p1Fish.lives--;
+            this.p1Fish.lifeNumChanged = true;
+        }
+        // console.log(this.p1Fish.lives);
     }
 }

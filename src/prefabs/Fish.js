@@ -4,6 +4,8 @@ class Fish extends Player {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
+        this.lives = 3;
+        this.lifeNumChanged = false;
     }
 
     update(){
