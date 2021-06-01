@@ -37,5 +37,11 @@ class Fish extends Player {
             this.setVelocityX(0);
             this.setVelocityY(swimSpeed);
         }
+        /*
+        else {
+            this.setVelocityX(0);
+            this.setVelocityY(0);
+        }
+        */
     }
 }

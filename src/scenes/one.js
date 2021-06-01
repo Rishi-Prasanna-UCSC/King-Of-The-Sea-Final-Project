@@ -42,6 +42,7 @@ class One extends Phaser.Scene {
 
         let rock1 = this.physics.add.sprite(500, 340, "rock");
         this.rockGroup.add(rock1);
+        rock1.setScale(2);
         rock1.body.immovable = true;
         rock1.body.allowGravity = false;
 
