@@ -99,7 +99,7 @@ class One extends Phaser.Scene {
                 start: 0, end: 2
             }),
             frameRate: 2.5,
-            repeat: 1
+            repeat: -1
         });
         clam.anims.play('clamOpen');
 
