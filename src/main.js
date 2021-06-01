@@ -8,7 +8,7 @@ let config = {
     width: widthScreen,
     height: heightScreen,
     scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver],
-    // scene: [One, Pause], //debug
+    // scene: [One, Pause, GameOver], // Debug
     physics: {
         default: 'arcade',
         arcade: {
@@ -29,3 +29,6 @@ let UP, DOWN, RIGHT, LEFT;
 let playMusic = [false, false];
 
 let swimSpeed = 400;
+
+// If a level is failed, set this to the number of the level that was failed.
+let numLevelFailed = 0;

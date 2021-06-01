@@ -176,6 +176,10 @@ class One extends Phaser.Scene {
                 this.heart1 = this.add.sprite(50, 50, 'lostH');
                 this.heart1.setScale(1.4);
                 this.p1Fish.destroy();
+                numLevelFailed = 1;
+                this.time.delayedCall(2000, () => {
+                    this.scene.start("gameOver");
+                }, null, this);
             }
 
 

@@ -3,12 +3,13 @@ class LevelComplete extends Phaser.Scene {
         super("levelComplete");
     }
     preload() {
+        
 
     }
     create() {
 
     }
     update() {
-        
+
     }
 }
