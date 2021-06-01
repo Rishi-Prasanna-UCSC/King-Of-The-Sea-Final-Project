@@ -86,34 +86,6 @@ class One extends Phaser.Scene {
     }
 
     update(){
-
-        if (Phaser.Input.Keyboard.JustDown(LEFT)) {
-            this.p1Fish.flipX = true;
-            this.p1Fish.angle = 0;
-            this.p1Fish.setVelocityY(0);
-            this.p1Fish.setVelocityX(-swimSpeed);
-        }
-        else if (Phaser.Input.Keyboard.JustDown(RIGHT)) {
-            this.p1Fish.flipX = false;
-            this.p1Fish.angle = 0;
-            this.p1Fish.setVelocityY(0);
-            this.p1Fish.setVelocityX(swimSpeed);
-        }
-        else if (Phaser.Input.Keyboard.JustDown(UP)) {
-            this.p1Fish.flipX = false;
-            this.p1Fish.body.angle = 270;
-            this.p1Fish.angle = 270;
-            this.p1Fish.setVelocityX(0);
-            this.p1Fish.setVelocityY(-swimSpeed);
-        }
-        else if (Phaser.Input.Keyboard.JustDown(DOWN)) {
-            this.p1Fish.flipX = false;
-            this.p1Fish.body.angle = 90;
-            this.p1Fish.angle = 90;
-            this.p1Fish.setVelocityX(0);
-            this.p1Fish.setVelocityY(swimSpeed);
-        }
-
         this.p1Fish.update();
         // if ()
 
