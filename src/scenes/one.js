@@ -94,14 +94,22 @@ class One extends Phaser.Scene {
 
 
         this.anims.create({
-            key: 'clamOpen',
+            key: 'clamMouthOpen',
             frames: this.anims.generateFrameNumbers('clam', {
-                start: 0, end: 2
+                start: 2, end: 2
             }),
             frameRate: 2.5,
             repeat: -1
         });
-        clam.anims.play('clamOpen');
+        this.anims.create({
+            key: 'clamOpenAnim',
+            frames: this.anims.generateFrameNumbers('clam', {
+                start: 0, end: 2
+            }),
+            frameRate: 2.5,
+            repeat: 0
+        });
+        clam.anims.play('clamMouthOpen');
 
         
 
@@ -183,11 +191,11 @@ class One extends Phaser.Scene {
         gem.destroy();
     }
 
-    touchedEnemy(){
+    touchedEnemy(fish, clam){
         if (this.p1Fish.lives > 0) {
             this.p1Fish.lives--;
             this.p1Fish.lifeNumChanged = true;
+            clam.anims.play('clamOpenAnim');
         }
-        // console.log(this.p1Fish.lives);
     }
 }
