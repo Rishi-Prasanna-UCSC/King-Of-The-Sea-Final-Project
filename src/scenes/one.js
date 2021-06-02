@@ -26,6 +26,9 @@ class One extends Phaser.Scene {
     }
 
     create(){
+
+        currLevel = 1;
+
         this.add.image(0, 0, 'BG').setOrigin(0);
 
         //Key Controls
@@ -146,6 +149,7 @@ class One extends Phaser.Scene {
     }
 
     update(){
+        
         this.p1Fish.update();
         if (!this.p1Fish.dead) {
             if (this.p1Fish.lifeNumChanged) {
@@ -238,7 +242,8 @@ class One extends Phaser.Scene {
 
     touchedFinish(fish, finish){
         finish.destroy();
-        this.time.delayedCall(2000, () => {
+        // this.p1Fish.stop();
+        this.time.delayedCall(600, () => {
             this.scene.resume();
             this.scene.start("levelComplete");
         }, null, this);

@@ -7,7 +7,7 @@ let config = {
     type: Phaser.CANVAS,
     width: widthScreen,
     height: heightScreen,
-    // scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver],
+    // scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver, Two],
     scene: [One, Pause, LevelComplete, GameOver, Two], // Debug
     physics: {
         default: 'arcade',
@@ -32,3 +32,5 @@ let swimSpeed = 400;
 
 // If a level is failed, set this to the number of the level that was failed.
 let numLevelFailed = 0;
+
+let currLevel = 0;

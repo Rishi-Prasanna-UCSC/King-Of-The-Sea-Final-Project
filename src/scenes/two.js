@@ -8,6 +8,8 @@ class Two extends Phaser.Scene {
     }
 
     create(){
+            currLevel = 2;
+
              //creates pause button
              this.pause = this.add.image(720, 50, 'Pause');
              this.pause.setInteractive();
@@ -16,6 +18,9 @@ class Two extends Phaser.Scene {
                  this.scene.pause();
                  this.scene.launch('pauseScene');
              });
+
+            //  this.currLevel = two;
+            //  console.log(this.currLevel);
     }
 
     update(){
