@@ -26,13 +26,14 @@ class One extends Phaser.Scene {
     }
 
     create(){
-        this.add.image(0, 0, 'BG');
+        this.add.image(0, 0, 'BG').setOrigin(0);
 
         //Key Controls
         UP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         LEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         DOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         RIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        
 
         //create groups
         this.rockGroup = this.physics.add.group();
@@ -126,64 +127,82 @@ class One extends Phaser.Scene {
         this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
         this.physics.add.collider(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
         this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+
+
+
+        /*
+        // configure main camera (bg image is 3000x3000)
+        this.cameras.main.setBounds(0, 0, 4000, 4000);
+        this.cameras.main.setZoom(1);
+        // have camera follow copter
+        // startFollow(target [, roundPixels] [, lerpX] [, lerpY] [, offsetX] [, offsetY])
+        this.cameras.main.startFollow(this.p1Fish, true, 0.1, 0.1);
+        // set camera dead zone
+        this.cameras.main.setDeadzone(200, 200);
+        this.cameras.main.setName("center");
+        */
     }
 
     update(){
         this.p1Fish.update();
-        if (this.p1Fish.lifeNumChanged) {
-
-            if (this.p1Fish.lives == 3) {
-                this.heart3.destroy();
-                this.heart3 = this.add.sprite(170, 50, 'lifeH');
-                this.heart3.setScale(1.4);
-                this.heart2.destroy();
-                this.heart2 = this.add.sprite(110, 50, 'lifeH');
-                this.heart2.setScale(1.4);
-                this.heart1.destroy();
-                this.heart1 = this.add.sprite(50, 50, 'lifeH');
-                this.heart1.setScale(1.4);
-            }
-            if (this.p1Fish.lives == 2) {
-                this.heart3.destroy();
-                this.heart3 = this.add.sprite(170, 50, 'lostH');
-                this.heart3.setScale(1.4);
-                this.heart2.destroy();
-                this.heart2 = this.add.sprite(110, 50, 'lifeH');
-                this.heart2.setScale(1.4);
-                this.heart1.destroy();
-                this.heart1 = this.add.sprite(50, 50, 'lifeH');
-                this.heart1.setScale(1.4);
-            }
-            else if (this.p1Fish.lives == 1) {
-                this.heart3.destroy();
-                this.heart3 = this.add.sprite(170, 50, 'lostH');
-                this.heart3.setScale(1.4);
-                this.heart2.destroy();
-                this.heart2 = this.add.sprite(110, 50, 'lostH');
-                this.heart2.setScale(1.4);
-                this.heart1.destroy();
-                this.heart1 = this.add.sprite(50, 50, 'lifeH');
-                this.heart1.setScale(1.4);
-            }
-            else if (this.p1Fish.lives == 0) {
-                this.heart3.destroy();
-                this.heart3 = this.add.sprite(170, 50, 'lostH');
-                this.heart3.setScale(1.4);
-                this.heart2.destroy();
-                this.heart2 = this.add.sprite(110, 50, 'lostH');
-                this.heart2.setScale(1.4);
-                this.heart1.destroy();
-                this.heart1 = this.add.sprite(50, 50, 'lostH');
-                this.heart1.setScale(1.4);
-                this.p1Fish.destroy();
-                numLevelFailed = 1;
-                this.time.delayedCall(2000, () => {
-                    this.scene.start("gameOver");
-                }, null, this);
-            }
+        if (!this.p1Fish.dead) {
+            if (this.p1Fish.lifeNumChanged) {
+                if (this.p1Fish.lives == 3) {
+                    this.heart3.destroy();
+                    this.heart3 = this.add.sprite(170, 50, 'lifeH');
+                    this.heart3.setScale(1.4);
+                    this.heart2.destroy();
+                    this.heart2 = this.add.sprite(110, 50, 'lifeH');
+                    this.heart2.setScale(1.4);
+                    this.heart1.destroy();
+                    this.heart1 = this.add.sprite(50, 50, 'lifeH');
+                    this.heart1.setScale(1.4);
+                }
+                if (this.p1Fish.lives == 2) {
+                    this.heart3.destroy();
+                    this.heart3 = this.add.sprite(170, 50, 'lostH');
+                    this.heart3.setScale(1.4);
+                    this.heart2.destroy();
+                    this.heart2 = this.add.sprite(110, 50, 'lifeH');
+                    this.heart2.setScale(1.4);
+                    this.heart1.destroy();
+                    this.heart1 = this.add.sprite(50, 50, 'lifeH');
+                    this.heart1.setScale(1.4);
+                }
+                else if (this.p1Fish.lives == 1) {
+                    this.heart3.destroy();
+                    this.heart3 = this.add.sprite(170, 50, 'lostH');
+                    this.heart3.setScale(1.4);
+                    this.heart2.destroy();
+                    this.heart2 = this.add.sprite(110, 50, 'lostH');
+                    this.heart2.setScale(1.4);
+                    this.heart1.destroy();
+                    this.heart1 = this.add.sprite(50, 50, 'lifeH');
+                    this.heart1.setScale(1.4);
+                }
+                else if (this.p1Fish.lives == 0) {
+                    this.heart3.destroy();
+                    this.heart3 = this.add.sprite(170, 50, 'lostH');
+                    this.heart3.setScale(1.4);
+                    this.heart2.destroy();
+                    this.heart2 = this.add.sprite(110, 50, 'lostH');
+                    this.heart2.setScale(1.4);
+                    this.heart1.destroy();
+                    this.heart1 = this.add.sprite(50, 50, 'lostH');
+                    this.heart1.setScale(1.4);
+                    this.p1Fish.setVisible(false);
+                    this.p1Fish.dead = true;
+                }
 
 
-            this.p1Fish.lifeNumChanged = false;
+                this.p1Fish.lifeNumChanged = false;
+            }
+        }
+        else {
+            numLevelFailed = 1;
+            this.time.delayedCall(2000, () => {
+                this.scene.start("gameOver");
+            }, null, this);
         }
     }
 
