@@ -16,6 +16,8 @@ class Two extends Phaser.Scene {
                  this.scene.pause();
                  this.scene.launch('pauseScene');
              });
+
+             
     }
 
     update(){

@@ -205,7 +205,8 @@ class One extends Phaser.Scene {
 
     touchedFinish(fish, finish){
         finish.destroy();
-        this.time.delayedCall(2000, () => {
+        // this.p1Fish.stop();
+        this.time.delayedCall(600, () => {
             this.scene.resume();
             this.scene.start("levelComplete");
         }, null, this);
