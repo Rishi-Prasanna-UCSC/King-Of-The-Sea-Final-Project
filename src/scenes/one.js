@@ -74,9 +74,25 @@ class One extends Phaser.Scene {
         // 'c', x, lowY, highY    -> create column.
         // 'i', x, y, 0           -> create individual cell.
         let wallArr = [
-            'r', 120, 1700, 120,
-            'c', 120, 320, 920,
-            'i', 500, 500, 0
+            // boundaries.
+            'r', 120, 3720, 120,
+            'c', 120, 320, 3720,
+            'r', 320, 3720, 3720,
+            'c', 3720, 320, 3520,
+
+            // top left section.
+            'r', 520, 1220, 520,
+            'r', 320, 1220, 920,
+            'i', 1520, 320, 0,
+            'c', 1520, 720, 1720,
+
+            // middle left section.
+            'r', 520, 1220, 1320,
+            'r', 520, 1420, 1720,
+            'c', 720, 1720, 2520,
+
+            // bottom left section.
+            'r', 320, 1120, 3320,
         ];
 
 
@@ -92,7 +108,7 @@ class One extends Phaser.Scene {
         
 
         
-        let finish = this.physics.add.sprite(3700, 3700, 'gemT');
+        let finish = this.physics.add.sprite(3500, 3500, 'gemT');
         this.finGemGroup.add(finish);
         finish.setScale(0.65);
         finish.body.immovable = true;
