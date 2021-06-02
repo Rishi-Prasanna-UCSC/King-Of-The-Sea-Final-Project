@@ -74,10 +74,13 @@ class One extends Phaser.Scene {
         // Lives.
         this.heart1 = this.add.sprite(50, 50, 'lifeH');
         this.heart1.setScale(1.4);
+        this.heart1.setScrollFactor(0);
         this.heart2 = this.add.sprite(110, 50, 'lifeH');
         this.heart2.setScale(1.4);
+        this.heart2.setScrollFactor(0);
         this.heart3 = this.add.sprite(170, 50, 'lifeH');
         this.heart3.setScale(1.4);
+        this.heart3.setScrollFactor(0);
 
 
 
@@ -123,6 +126,7 @@ class One extends Phaser.Scene {
             this.scene.pause();
             this.scene.launch('pauseScene');
         });
+        this.pause.setScrollFactor(0);
         
         this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
         this.physics.add.collider(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
@@ -130,17 +134,15 @@ class One extends Phaser.Scene {
 
 
 
-        /*
         // configure main camera (bg image is 3000x3000)
         this.cameras.main.setBounds(0, 0, 4000, 4000);
         this.cameras.main.setZoom(1);
         // have camera follow copter
         // startFollow(target [, roundPixels] [, lerpX] [, lerpY] [, offsetX] [, offsetY])
-        this.cameras.main.startFollow(this.p1Fish, true, 0.1, 0.1);
+        this.cameras.main.startFollow(this.p1Fish, true, 0.5, 0.5);
         // set camera dead zone
-        this.cameras.main.setDeadzone(200, 200);
+        this.cameras.main.setDeadzone(100, 50);
         this.cameras.main.setName("center");
-        */
     }
 
     update(){
@@ -151,45 +153,57 @@ class One extends Phaser.Scene {
                     this.heart3.destroy();
                     this.heart3 = this.add.sprite(170, 50, 'lifeH');
                     this.heart3.setScale(1.4);
+                    this.heart3.setScrollFactor(0);
                     this.heart2.destroy();
                     this.heart2 = this.add.sprite(110, 50, 'lifeH');
                     this.heart2.setScale(1.4);
+                    this.heart2.setScrollFactor(0);
                     this.heart1.destroy();
                     this.heart1 = this.add.sprite(50, 50, 'lifeH');
                     this.heart1.setScale(1.4);
+                    this.heart1.setScrollFactor(0);
                 }
                 if (this.p1Fish.lives == 2) {
                     this.heart3.destroy();
                     this.heart3 = this.add.sprite(170, 50, 'lostH');
                     this.heart3.setScale(1.4);
+                    this.heart3.setScrollFactor(0);
                     this.heart2.destroy();
                     this.heart2 = this.add.sprite(110, 50, 'lifeH');
                     this.heart2.setScale(1.4);
+                    this.heart2.setScrollFactor(0);
                     this.heart1.destroy();
                     this.heart1 = this.add.sprite(50, 50, 'lifeH');
                     this.heart1.setScale(1.4);
+                    this.heart1.setScrollFactor(0);
                 }
                 else if (this.p1Fish.lives == 1) {
                     this.heart3.destroy();
                     this.heart3 = this.add.sprite(170, 50, 'lostH');
                     this.heart3.setScale(1.4);
+                    this.heart3.setScrollFactor(0);
                     this.heart2.destroy();
                     this.heart2 = this.add.sprite(110, 50, 'lostH');
                     this.heart2.setScale(1.4);
+                    this.heart2.setScrollFactor(0);
                     this.heart1.destroy();
                     this.heart1 = this.add.sprite(50, 50, 'lifeH');
                     this.heart1.setScale(1.4);
+                    this.heart1.setScrollFactor(0);
                 }
                 else if (this.p1Fish.lives == 0) {
                     this.heart3.destroy();
                     this.heart3 = this.add.sprite(170, 50, 'lostH');
                     this.heart3.setScale(1.4);
+                    this.heart3.setScrollFactor(0);
                     this.heart2.destroy();
                     this.heart2 = this.add.sprite(110, 50, 'lostH');
                     this.heart2.setScale(1.4);
+                    this.heart2.setScrollFactor(0);
                     this.heart1.destroy();
                     this.heart1 = this.add.sprite(50, 50, 'lostH');
                     this.heart1.setScale(1.4);
+                    this.heart1.setScrollFactor(0);
                     this.p1Fish.setVisible(false);
                     this.p1Fish.dead = true;
                 }
