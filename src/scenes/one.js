@@ -75,7 +75,8 @@ class One extends Phaser.Scene {
         // 'i', x, y, 0           -> create individual cell.
         let wallArr = [
             'r', 120, 1700, 120,
-            'c', 120, 320, 920
+            'c', 120, 320, 920,
+            'i', 500, 500, 0
         ];
 
 
@@ -174,6 +175,9 @@ class One extends Phaser.Scene {
                 col.push(arr[i+1], arr[i+2], arr[i+3]);
                 this.spawnCol(group, col);
             }
+            else if (arr[i] == 'i') {
+                this.spawnInd(group, arr[i+1], arr[i+2]);
+            }
         }
     }
 
@@ -202,6 +206,13 @@ class One extends Phaser.Scene {
             rock1.body.immovable = true;
             rock1.body.allowGravity = false;
         }
+    }
+    spawnInd(group, x, y) {
+        let rock1 = this.physics.add.sprite(x, y, "rock");
+        group.add(rock1);
+        rock1.setScale(2);
+        rock1.body.immovable = true;
+        rock1.body.allowGravity = false;
     }
 
     spawnClams(group) {
