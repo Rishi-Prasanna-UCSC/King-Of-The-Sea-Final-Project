@@ -6,15 +6,16 @@ class Pause extends Phaser.Scene {
     preload(){
         this.load.image('Pause', 'assets/art/PauseButton.png');
         this.load.image('MMBackground', 'assets/MainMenuBackground.png');
+        this.load.image('Home', 'assets/art/HouseIcon.png');
     }
 
     create(){
         this.resume = this.add.image(720, 50, 'Pause');
         let pauseConfig = {
             fontFamily: 'Arial Black',
-            fontSize: '24px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
+            fontSize: '32px',
+            // backgroundColor: '#F3B141',
+            color: '#000000',
             align: 'right',
             padding: {
                 top: 5,
@@ -26,8 +27,9 @@ class Pause extends Phaser.Scene {
         this.pauseDisp = this.add.text(360,
             100, "Paused", pauseConfig);
 
-        this.homeDisp = this.add.text(690,
-            100, "Home", pauseConfig);
+        this.homeDisp = this.add.image(720,
+            100, "Home");
+        this.homeDisp.setScale(0.02);
         
         this.resume.setInteractive();
         this.homeDisp.setInteractive();
