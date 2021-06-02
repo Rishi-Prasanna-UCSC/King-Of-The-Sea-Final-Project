@@ -103,8 +103,6 @@ class Menu extends Phaser.Scene {
         this.tutorial.on('pointerdown', () => {
             this.scene.start("tutorial");
         });
-
-
     }
 
     update() {

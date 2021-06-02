@@ -14,11 +14,18 @@ class One extends Phaser.Scene {
         this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png', 
             {frameWidth: 100, frameHeight: 100});
         
+        // Transformation gem...probably to be used as the finish line.
+        this.load.image('gemT', 'assets/sprites/TransformGem.png');
 
+        // Health gem.
+        this.load.image('gemH', 'assets/sprites/HealthGem.png');
+
+        // 
+        this.load.image('lifeH', 'assets/sprites/HeartIcon.png');
+        this.load.image('lostH', 'assets/sprites/NotHeartIcon.png');
     }
 
     create(){
-        
         this.add.image(0, 0, 'BG');
 
         //Key Controls
@@ -30,22 +37,50 @@ class One extends Phaser.Scene {
         //create groups
         this.rockGroup = this.physics.add.group();
         this.enemiesGroup = this.physics.add.group();
+        this.finGemGroup = this.physics.add.group();
+        this.helGemGroup = this.physics.add.group();
 
         //creating player
         this.p1Fish = new Fish(this, 100, 340, "fish");
         
 
-        this.rock1 = this.add.image(500, 340, "rock");
-        this.rockGroup.add(this.rock1);
+        let rock1 = this.physics.add.sprite(500, 340, "rock");
+        this.rockGroup.add(rock1);
+        rock1.setScale(2);
+        rock1.body.immovable = true;
+        rock1.body.allowGravity = false;
 
         this.physics.add.collider(this.p1Fish, this.rockGroup);
 
-        this.clam = new Enemy(this, 300, 340, "clam");
-        this.enemiesGroup.add(this.clam);
-        this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
+        let clam = new Enemy(this, 300, 340, "clam");
+        this.enemiesGroup.add(clam);
+        clam.body.immovable = true;
+        clam.body.allowGravity = false;
 
 
-        // Running Ant Animation.
+        let finish = this.physics.add.sprite(700, 150, 'gemT');
+        this.finGemGroup.add(finish);
+        finish.setScale(0.65);
+        finish.body.immovable = true;
+        finish.body.allowGravity = false;
+
+        let health = this.physics.add.sprite(300, 100, 'gemH');
+        this.helGemGroup.add(health);
+        health.setScale(0.65);
+        health.body.immovable = true;
+        health.body.allowGravity = false;
+
+        // Lives.
+        this.heart1 = this.add.sprite(50, 50, 'lifeH');
+        this.heart1.setScale(1.4);
+        this.heart2 = this.add.sprite(110, 50, 'lifeH');
+        this.heart2.setScale(1.4);
+        this.heart3 = this.add.sprite(170, 50, 'lifeH');
+        this.heart3.setScale(1.4);
+
+
+
+        // Swimming Fish Animation.
         this.anims.create({
             key: 'FishSwimming',
             frames: this.anims.generateFrameNumbers('fish', {
@@ -59,14 +94,22 @@ class One extends Phaser.Scene {
 
 
         this.anims.create({
-            key: 'clamOpen',
+            key: 'clamMouthOpen',
             frames: this.anims.generateFrameNumbers('clam', {
-                start: 0, end: 2
+                start: 2, end: 2
             }),
             frameRate: 2.5,
             repeat: -1
         });
-        this.clam.anims.play('clamOpen');
+        this.anims.create({
+            key: 'clamOpenAnim',
+            frames: this.anims.generateFrameNumbers('clam', {
+                start: 0, end: 2
+            }),
+            frameRate: 2.5,
+            repeat: 0
+        });
+        clam.anims.play('clamMouthOpen');
 
         
 
@@ -80,23 +123,83 @@ class One extends Phaser.Scene {
             this.scene.launch('pauseScene');
         });
         
+        this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
+        this.physics.add.collider(this.p1Fish, this.finGemGroup);
+        this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
     }
 
     update(){
         this.p1Fish.update();
-        // if ()
+        if (this.p1Fish.lifeNumChanged) {
 
-        if (this.p1Fish.checkCollision(this.enemy)){
-            console.log("game over");
+            if (this.p1Fish.lives == 3) {
+                this.heart3.destroy();
+                this.heart3 = this.add.sprite(170, 50, 'lifeH');
+                this.heart3.setScale(1.4);
+                this.heart2.destroy();
+                this.heart2 = this.add.sprite(110, 50, 'lifeH');
+                this.heart2.setScale(1.4);
+                this.heart1.destroy();
+                this.heart1 = this.add.sprite(50, 50, 'lifeH');
+                this.heart1.setScale(1.4);
+            }
+            if (this.p1Fish.lives == 2) {
+                this.heart3.destroy();
+                this.heart3 = this.add.sprite(170, 50, 'lostH');
+                this.heart3.setScale(1.4);
+                this.heart2.destroy();
+                this.heart2 = this.add.sprite(110, 50, 'lifeH');
+                this.heart2.setScale(1.4);
+                this.heart1.destroy();
+                this.heart1 = this.add.sprite(50, 50, 'lifeH');
+                this.heart1.setScale(1.4);
+            }
+            else if (this.p1Fish.lives == 1) {
+                this.heart3.destroy();
+                this.heart3 = this.add.sprite(170, 50, 'lostH');
+                this.heart3.setScale(1.4);
+                this.heart2.destroy();
+                this.heart2 = this.add.sprite(110, 50, 'lostH');
+                this.heart2.setScale(1.4);
+                this.heart1.destroy();
+                this.heart1 = this.add.sprite(50, 50, 'lifeH');
+                this.heart1.setScale(1.4);
+            }
+            else if (this.p1Fish.lives == 0) {
+                this.heart3.destroy();
+                this.heart3 = this.add.sprite(170, 50, 'lostH');
+                this.heart3.setScale(1.4);
+                this.heart2.destroy();
+                this.heart2 = this.add.sprite(110, 50, 'lostH');
+                this.heart2.setScale(1.4);
+                this.heart1.destroy();
+                this.heart1 = this.add.sprite(50, 50, 'lostH');
+                this.heart1.setScale(1.4);
+                this.p1Fish.destroy();
+                numLevelFailed = 1;
+                this.time.delayedCall(2000, () => {
+                    this.scene.start("gameOver");
+                }, null, this);
+            }
+
+
+            this.p1Fish.lifeNumChanged = false;
         }
-
-        // //rock collision
-        // touchedRock(player, rock){
-
-        // }
     }
 
-    touchedEnemy(fish, enemy){
-        console.log("help");
+    addLife(fish, gem) {
+        if (fish.lives < 3) {
+            fish.lives++;
+            fish.lifeNumChanged = true;
+        }
+        gem.destroy();
+    }
+
+    touchedEnemy(fish, clam){
+        if (this.p1Fish.lives > 0) {
+            this.p1Fish.lives--;
+            this.p1Fish.lifeNumChanged = true;
+            clam.anims.play('clamOpenAnim');
+        }
     }
 }
