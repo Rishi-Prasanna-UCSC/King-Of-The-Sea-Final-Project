@@ -34,3 +34,9 @@ let swimSpeed = 400;
 let numLevelFailed = 0;
 
 let currLevel = 0;
+
+// Whether each creature is unlocked.
+// unlocked[0] = fish.
+// unlocked[1] = octopus, or shark.
+// unlocked[2] = big shark.
+let unlocked = [true, false, false];
