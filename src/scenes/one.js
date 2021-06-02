@@ -124,7 +124,7 @@ class One extends Phaser.Scene {
         });
         
         this.physics.add.collider(this.p1Fish, this.enemiesGroup, null, this.touchedEnemy, this);
-        this.physics.add.collider(this.p1Fish, this.finGemGroup);
+        this.physics.add.collider(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
         this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
     }
 
@@ -201,5 +201,16 @@ class One extends Phaser.Scene {
             this.p1Fish.lifeNumChanged = true;
             clam.anims.play('clamOpenAnim');
         }
+    }
+
+    touchedFinish(fish, finish){
+        finish.destroy();
+        this.time.delayedCall(2000, () => {
+            this.scene.resume();
+            this.scene.start("levelComplete");
+        }, null, this);
+        // this.scene.pause();
+  
+        
     }
 }

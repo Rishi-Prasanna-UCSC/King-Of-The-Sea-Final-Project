@@ -8,7 +8,7 @@ let config = {
     width: widthScreen,
     height: heightScreen,
     // scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver],
-    scene: [One, Pause], // Debug
+    scene: [One, Pause, LevelComplete, GameOver, Two], // Debug
     physics: {
         default: 'arcade',
         arcade: {
