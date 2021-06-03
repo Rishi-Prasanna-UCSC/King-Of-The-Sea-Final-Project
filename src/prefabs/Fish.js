@@ -7,10 +7,20 @@ class Fish extends Player {
         this.lives = 3;
         this.lifeNumChanged = false;
         this.dead = false;
+        this.hurt = 0;
     }
 
     update(){
         if (!this.dead) {
+            if (this.hurt > 0) {
+                this.hurt--;
+                if ((this.hurt % 4 == 0) || (this.hurt % 4 == 1)) {
+                    this.setVisible(true);
+                }
+                else if ((this.hurt % 4 == 2) || (this.hurt % 4 == 3)) {
+                    this.setVisible(false);
+                }
+            }
             if (Phaser.Input.Keyboard.JustDown(LEFT)) {
                 this.flipX = true;
                 this.setBodySize(275, 100);

@@ -410,17 +410,23 @@ class One extends Phaser.Scene {
     }
 
     touchedClam(fish, clam){
-        if (fish.lives > 0) {
-            fish.lives--;
-            fish.lifeNumChanged = true;
-            clam.anims.play('clamOpenAnim');
+        if (fish.hurt == 0) {
+            if (fish.lives > 0) {
+                fish.lives--;
+                fish.lifeNumChanged = true;
+                fish.hurt = 200;
+                clam.anims.play('clamOpenAnim');
+            }
         }
     }
 
     touchedBShark(fish, shark) {
-        if (fish.lives > 0) {
-            fish.lives--;
-            fish.lifeNumChanged = true;
+        if (fish.hurt == 0) {
+            if (fish.lives > 0) {
+                fish.lives--;
+                fish.hurt = 200;
+                fish.lifeNumChanged = true;
+            }
         }
     }
 
