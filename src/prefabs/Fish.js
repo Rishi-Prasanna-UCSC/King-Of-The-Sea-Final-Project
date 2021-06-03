@@ -7,11 +7,12 @@ class Fish extends Player {
         this.lives = 3;
         this.lifeNumChanged = false;
         this.dead = false;
+        this.immobilized = false;
         this.hurt = 0;
     }
 
     update(){
-        if (!this.dead) {
+        if ((!this.dead) && (!this.immobilized)) {
             if (this.hurt > 0) {
                 this.hurt--;
                 if ((this.hurt % 4 == 0) || (this.hurt % 4 == 1)) {

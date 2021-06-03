@@ -13,7 +13,7 @@ class One extends Phaser.Scene {
             {frameWidth: 275, frameHeight: 100});
         this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png', 
             {frameWidth: 100, frameHeight: 100});
-        this.load.spritesheet('blueShark', 'assets/character/enemySharkSpritesheet.png', 
+        this.load.spritesheet('blueShark', 'assets/character/blueSharkSpritesheet.png',
             {frameWidth: 736, frameHeight: 258});
         
         // Transformation gem...probably to be used as the finish line.
@@ -88,6 +88,14 @@ class One extends Phaser.Scene {
             }),
             frameRate: 2.5,
             repeat: -1
+        });
+        // Blue shark eating.
+        this.anims.create({
+            key: 'blueSharkEat',
+            frames: this.anims.generateFrameNumbers('blueShark', {
+                start: 2, end: 2
+            }),
+            frameRate: 2.5,
         });
 
 
@@ -322,82 +330,86 @@ class One extends Phaser.Scene {
     }
 
     update(){
-        
         this.p1Fish.update();
         for (let i = 0; i < this.BSharksGroup.children.entries.length; i++) {
             this.BSharksGroup.children.entries[i].update();
         }
-
         if (!this.p1Fish.dead) {
             if (this.p1Fish.lifeNumChanged) {
-                if (this.p1Fish.lives == 3) {
-                    this.heart3.destroy();
-                    this.heart3 = this.add.sprite(170, 50, 'lifeH');
-                    this.heart3.setScale(1.4);
-                    this.heart3.setScrollFactor(0);
-                    this.heart2.destroy();
-                    this.heart2 = this.add.sprite(110, 50, 'lifeH');
-                    this.heart2.setScale(1.4);
-                    this.heart2.setScrollFactor(0);
-                    this.heart1.destroy();
-                    this.heart1 = this.add.sprite(50, 50, 'lifeH');
-                    this.heart1.setScale(1.4);
-                    this.heart1.setScrollFactor(0);
-                }
-                if (this.p1Fish.lives == 2) {
-                    this.heart3.destroy();
-                    this.heart3 = this.add.sprite(170, 50, 'lostH');
-                    this.heart3.setScale(1.4);
-                    this.heart3.setScrollFactor(0);
-                    this.heart2.destroy();
-                    this.heart2 = this.add.sprite(110, 50, 'lifeH');
-                    this.heart2.setScale(1.4);
-                    this.heart2.setScrollFactor(0);
-                    this.heart1.destroy();
-                    this.heart1 = this.add.sprite(50, 50, 'lifeH');
-                    this.heart1.setScale(1.4);
-                    this.heart1.setScrollFactor(0);
-                }
-                else if (this.p1Fish.lives == 1) {
-                    this.heart3.destroy();
-                    this.heart3 = this.add.sprite(170, 50, 'lostH');
-                    this.heart3.setScale(1.4);
-                    this.heart3.setScrollFactor(0);
-                    this.heart2.destroy();
-                    this.heart2 = this.add.sprite(110, 50, 'lostH');
-                    this.heart2.setScale(1.4);
-                    this.heart2.setScrollFactor(0);
-                    this.heart1.destroy();
-                    this.heart1 = this.add.sprite(50, 50, 'lifeH');
-                    this.heart1.setScale(1.4);
-                    this.heart1.setScrollFactor(0);
-                }
-                else if (this.p1Fish.lives == 0) {
-                    this.heart3.destroy();
-                    this.heart3 = this.add.sprite(170, 50, 'lostH');
-                    this.heart3.setScale(1.4);
-                    this.heart3.setScrollFactor(0);
-                    this.heart2.destroy();
-                    this.heart2 = this.add.sprite(110, 50, 'lostH');
-                    this.heart2.setScale(1.4);
-                    this.heart2.setScrollFactor(0);
-                    this.heart1.destroy();
-                    this.heart1 = this.add.sprite(50, 50, 'lostH');
-                    this.heart1.setScale(1.4);
-                    this.heart1.setScrollFactor(0);
-                    this.p1Fish.setVisible(false);
-                    this.p1Fish.dead = true;
-                }
-
+                
+                this.updateHearts(true);
 
                 this.p1Fish.lifeNumChanged = false;
             }
         }
         else {
             numLevelFailed = 1;
-            this.time.delayedCall(2000, () => {
+            this.p1Fish.destroy();
+            this.time.delayedCall(2800, () => {
                 this.scene.start("gameOver");
             }, null, this);
+        }
+    }
+
+    updateHearts(triggerDead) {
+        if (this.p1Fish.lives == 3) {
+            this.heart3.destroy();
+            this.heart3 = this.add.sprite(170, 50, 'lifeH');
+            this.heart3.setScale(1.4);
+            this.heart3.setScrollFactor(0);
+            this.heart2.destroy();
+            this.heart2 = this.add.sprite(110, 50, 'lifeH');
+            this.heart2.setScale(1.4);
+            this.heart2.setScrollFactor(0);
+            this.heart1.destroy();
+            this.heart1 = this.add.sprite(50, 50, 'lifeH');
+            this.heart1.setScale(1.4);
+            this.heart1.setScrollFactor(0);
+        }
+        if (this.p1Fish.lives == 2) {
+            this.heart3.destroy();
+            this.heart3 = this.add.sprite(170, 50, 'lostH');
+            this.heart3.setScale(1.4);
+            this.heart3.setScrollFactor(0);
+            this.heart2.destroy();
+            this.heart2 = this.add.sprite(110, 50, 'lifeH');
+            this.heart2.setScale(1.4);
+            this.heart2.setScrollFactor(0);
+            this.heart1.destroy();
+            this.heart1 = this.add.sprite(50, 50, 'lifeH');
+            this.heart1.setScale(1.4);
+            this.heart1.setScrollFactor(0);
+        }
+        else if (this.p1Fish.lives == 1) {
+            this.heart3.destroy();
+            this.heart3 = this.add.sprite(170, 50, 'lostH');
+            this.heart3.setScale(1.4);
+            this.heart3.setScrollFactor(0);
+            this.heart2.destroy();
+            this.heart2 = this.add.sprite(110, 50, 'lostH');
+            this.heart2.setScale(1.4);
+            this.heart2.setScrollFactor(0);
+            this.heart1.destroy();
+            this.heart1 = this.add.sprite(50, 50, 'lifeH');
+            this.heart1.setScale(1.4);
+            this.heart1.setScrollFactor(0);
+        }
+        else if (this.p1Fish.lives == 0) {
+            this.heart3.destroy();
+            this.heart3 = this.add.sprite(170, 50, 'lostH');
+            this.heart3.setScale(1.4);
+            this.heart3.setScrollFactor(0);
+            this.heart2.destroy();
+            this.heart2 = this.add.sprite(110, 50, 'lostH');
+            this.heart2.setScale(1.4);
+            this.heart2.setScrollFactor(0);
+            this.heart1.destroy();
+            this.heart1 = this.add.sprite(50, 50, 'lostH');
+            this.heart1.setScale(1.4);
+            this.heart1.setScrollFactor(0);
+            if (triggerDead) {
+                this.p1Fish.dead = true;
+            }
         }
     }
 
@@ -422,10 +434,19 @@ class One extends Phaser.Scene {
 
     touchedBShark(fish, shark) {
         if (fish.hurt == 0) {
-            if (fish.lives > 0) {
+            if (fish.lives > 1) {
                 fish.lives--;
                 fish.hurt = 200;
                 fish.lifeNumChanged = true;
+            }
+            else {
+                fish.lives--;
+                fish.lifeNumChanged = true;
+                this.updateHearts(true);
+                shark.anims.play('blueSharkEat');
+                this.time.delayedCall(600, () => {
+                    shark.anims.play('blueSharkSwim');
+                }, null, this);
             }
         }
     }
