@@ -48,7 +48,7 @@ class One extends Phaser.Scene {
         this.helGemGroup = this.physics.add.group();
 
         //creating player
-        this.p1Fish = new Fish(this, 300, 340, "fish");
+        this.p1Fish = new Fish(this, 320, 320, "fish");
 
         this.anims.create({
             key: 'clamMouthOpen',
@@ -88,7 +88,7 @@ class One extends Phaser.Scene {
 
             // middle left section.
             'r', 520, 1220, 1320,
-            'r', 520, 1420, 1720,
+            'r', 520, 1420, 1920,
             'c', 720, 1720, 2520,
 
             // bottom left section.
@@ -114,11 +114,20 @@ class One extends Phaser.Scene {
             'r', 2520, 3320, 1520,
             'r', 2720, 3520, 1920,
         ];
+        let clamArr = [
+            520, 320,
+            920, 1720,
+            1320, 1720,
+            2120, 520,
+            3120, 520,
+            520, 3120,
+            1320, 3120,
+        ];
 
 
         
         this.spawnWalls(this.rockGroup, wallArr);
-        //this.spawnClams(this.clamsGroup);
+        this.spawnClams(this.clamsGroup, clamArr);
 
 
 
@@ -133,13 +142,13 @@ class One extends Phaser.Scene {
         finish.setScale(0.65);
         finish.body.immovable = true;
         finish.body.allowGravity = false;
-        /*
-        let health = this.physics.add.sprite(300, 100, 'gemH');
+        
+        let health = this.physics.add.sprite(320, 3520, 'gemH');
         this.helGemGroup.add(health);
         health.setScale(0.65);
         health.body.immovable = true;
         health.body.allowGravity = false;
-        */
+        
 
         // Lives.
         this.heart1 = this.add.sprite(50, 50, 'lifeH');
@@ -193,7 +202,7 @@ class One extends Phaser.Scene {
         this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
         // have camera follow copter
         // startFollow(target [, roundPixels] [, lerpX] [, lerpY] [, offsetX] [, offsetY])
-        this.cameras.main.startFollow(this.p1Fish, true, 0.5, 0.5);
+        this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
         // set camera dead zone
         this.cameras.main.setDeadzone(100, 50);
         this.cameras.main.setName("center");
@@ -251,13 +260,16 @@ class One extends Phaser.Scene {
         rock1.body.allowGravity = false;
     }
 
-    spawnClams(group) {
-        let clam = new Enemy(this, 300, 340, "clam");
-        group.add(clam);
-        clam.body.immovable = true;
-        clam.body.allowGravity = false;
+    spawnClams(group, arr) {
+        for (let i = 0; i < arr.length; i += 2) {
+            let clam = new Enemy(this, arr[i], arr[i+1]+60, "clam");
+            group.add(clam);
+            clam.setScale(0.7);
+            clam.body.immovable = true;
+            clam.body.allowGravity = false;
 
-        clam.anims.play('clamMouthOpen');
+            clam.anims.play('clamMouthOpen');
+        }
     }
 
     update(){
