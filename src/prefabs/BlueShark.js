@@ -6,7 +6,6 @@ class BlueShark extends Phaser.GameObjects.Sprite {
         this.startX;
         this.endX;
         this.dir = 1;
-        this.eating = false;
     }
 
     update(){
