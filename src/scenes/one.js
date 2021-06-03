@@ -13,6 +13,8 @@ class One extends Phaser.Scene {
             {frameWidth: 275, frameHeight: 100});
         this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png', 
             {frameWidth: 100, frameHeight: 100});
+        this.load.spritesheet('blueShark', 'assets/character/enemySharkSpritesheet.png', 
+            {frameWidth: 736, frameHeight: 258});
         
         // Transformation gem...probably to be used as the finish line.
         this.load.image('gemT', 'assets/sprites/TransformGem.png');
@@ -41,7 +43,7 @@ class One extends Phaser.Scene {
 
         // Enemies
         this.clamsGroup = this.physics.add.group();
-        this.sharksGroup = this.physics.add.group();
+        this.BSharksGroup = this.physics.add.group();
 
         // Gems
         this.finGemGroup = this.physics.add.group();
@@ -50,6 +52,17 @@ class One extends Phaser.Scene {
         //creating player
         this.p1Fish = new Fish(this, 320, 320, "fish");
 
+
+        // Swimming Fish Animation.
+        this.anims.create({
+            key: 'FishSwimming',
+            frames: this.anims.generateFrameNumbers('fish', {
+                start: 0, end: 1
+            }),
+            frameRate: 5,
+            repeat: -1
+        });
+        // Clam mouth is already open.
         this.anims.create({
             key: 'clamMouthOpen',
             frames: this.anims.generateFrameNumbers('clam', {
@@ -58,6 +71,7 @@ class One extends Phaser.Scene {
             frameRate: 2.5,
             repeat: -1
         });
+        // Clam's mouth opening animation.
         this.anims.create({
             key: 'clamOpenAnim',
             frames: this.anims.generateFrameNumbers('clam', {
@@ -66,6 +80,18 @@ class One extends Phaser.Scene {
             frameRate: 2.5,
             repeat: 0
         });
+        // Blue shark swimming.
+        this.anims.create({
+            key: 'blueSharkSwim',
+            frames: this.anims.generateFrameNumbers('blueShark', {
+                start: 0, end: 1
+            }),
+            frameRate: 2.5,
+            repeat: -1
+        });
+
+
+
 
 
         // Each rock is 200 x 200 (because of scale).
@@ -114,6 +140,9 @@ class One extends Phaser.Scene {
             'r', 2520, 3320, 1520,
             'r', 2720, 3520, 1920,
         ];
+
+        // Much easier format.
+        // x, y
         let clamArr = [
             520, 320,
             920, 1720,
@@ -124,10 +153,21 @@ class One extends Phaser.Scene {
             1320, 3120,
         ];
 
+        // Blue Shark Guards.
+        // 'h', x1, x2, y <- Shark moves horizontally from x1 to x2.
+        // 'v', x, y1, y2 <- Shark moves vertically from y1 to y2.
+        let BSharkArr = [
+            540, 1120, 2720,
+            540, 2120, 3020,
+            2020, 2920, 3320,
+            1920, 3320, 340,
+        ];
+
 
         
         this.spawnWalls(this.rockGroup, wallArr);
         this.spawnClams(this.clamsGroup, clamArr);
+        this.spawnBSharks(this.BSharksGroup, BSharkArr);
 
 
 
@@ -148,6 +188,8 @@ class One extends Phaser.Scene {
         health.setScale(0.65);
         health.body.immovable = true;
         health.body.allowGravity = false;
+
+        // Blue sharks.
         
 
         // Lives.
@@ -163,15 +205,6 @@ class One extends Phaser.Scene {
 
 
 
-        // Swimming Fish Animation.
-        this.anims.create({
-            key: 'FishSwimming',
-            frames: this.anims.generateFrameNumbers('fish', {
-                start: 0, end: 1
-            }),
-            frameRate: 5,
-            repeat: -1
-        });
         this.p1Fish.setScale(0.5);
         this.p1Fish.anims.play('FishSwimming');
 
@@ -190,6 +223,7 @@ class One extends Phaser.Scene {
         this.pause.setScrollFactor(0);
         
         this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+        this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
         this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
         this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
 
@@ -198,8 +232,8 @@ class One extends Phaser.Scene {
         // Create camera.
         this.cameras.main.setBounds(0, 0, 4000, 4000);
 
-        // this.cameras.main.setZoom(1); // Real
-        this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
+        this.cameras.main.setZoom(1); // Real
+        // this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
         // have camera follow copter
         // startFollow(target [, roundPixels] [, lerpX] [, lerpY] [, offsetX] [, offsetY])
         this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
@@ -272,9 +306,28 @@ class One extends Phaser.Scene {
         }
     }
 
+    spawnBSharks(group, arr) {
+        for (let i = 0; i < arr.length; i += 3) {
+            let bshark = new BlueShark(this, arr[i], arr[i+2], "blueShark");
+            group.add(bshark);
+
+            bshark.startX = arr[i];
+            bshark.endX = arr[i+1];
+
+            bshark.setScale(0.7);
+            bshark.body.immovable = true;
+            bshark.body.allowGravity = false;
+            bshark.anims.play('blueSharkSwim');
+        }
+    }
+
     update(){
         
         this.p1Fish.update();
+        for (let i = 0; i < this.BSharksGroup.children.entries.length; i++) {
+            this.BSharksGroup.children.entries[i].update();
+        }
+
         if (!this.p1Fish.dead) {
             if (this.p1Fish.lifeNumChanged) {
                 if (this.p1Fish.lives == 3) {
@@ -357,10 +410,17 @@ class One extends Phaser.Scene {
     }
 
     touchedClam(fish, clam){
-        if (this.p1Fish.lives > 0) {
-            this.p1Fish.lives--;
-            this.p1Fish.lifeNumChanged = true;
+        if (fish.lives > 0) {
+            fish.lives--;
+            fish.lifeNumChanged = true;
             clam.anims.play('clamOpenAnim');
+        }
+    }
+
+    touchedBShark(fish, shark) {
+        if (fish.lives > 0) {
+            fish.lives--;
+            fish.lifeNumChanged = true;
         }
     }
 
