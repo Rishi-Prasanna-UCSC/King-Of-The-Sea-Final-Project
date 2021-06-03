@@ -108,7 +108,6 @@ class One extends Phaser.Scene {
         // 'c', x, lowY, highY    -> create column.
         // 'i', x, y, 0           -> create individual cell.
         let wallArr = [
-            // boundaries.
             'r', 120, 3720, 120,
             'c', 120, 320, 3720,
             'r', 320, 3720, 3720,
@@ -162,8 +161,7 @@ class One extends Phaser.Scene {
         ];
 
         // Blue Shark Guards.
-        // 'h', x1, x2, y <- Shark moves horizontally from x1 to x2.
-        // 'v', x, y1, y2 <- Shark moves vertically from y1 to y2.
+        // x1, x2, y <- Shark moves horizontally from x1 to x2.
         let BSharkArr = [
             540, 1120, 2720,
             540, 2120, 3020,
