@@ -7,13 +7,13 @@ let config = {
     type: Phaser.CANVAS,
     width: widthScreen,
     height: heightScreen,
-    // scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver, Two],
-    scene: [One, Pause, LevelComplete, GameOver, Two], // Debug
+    scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver, Two],
+    // scene: [One, Pause, LevelComplete, GameOver, Two], // Debug
     physics: {
         default: 'arcade',
         arcade: {
-            // debug: false
-            debug: true
+            debug: false
+            // debug: true
         }
     }
 }
