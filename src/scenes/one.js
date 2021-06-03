@@ -444,7 +444,7 @@ class One extends Phaser.Scene {
                 fish.lifeNumChanged = true;
                 this.updateHearts(true);
                 shark.anims.play('blueSharkEat');
-                this.time.delayedCall(600, () => {
+                this.time.delayedCall(300, () => {
                     shark.anims.play('blueSharkSwim');
                 }, null, this);
             }
