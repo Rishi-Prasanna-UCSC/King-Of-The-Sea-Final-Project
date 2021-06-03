@@ -9,7 +9,7 @@ class One extends Phaser.Scene {
 
         this.load.image('rock', 'assets/sprites/rock.png');
 
-        this.load.spritesheet('fish', 'assets/character/fishSpriteSheet.png',
+        this.load.spritesheet('fish', 'assets/character/fishSpritesheet.png',
             {frameWidth: 275, frameHeight: 100});
         this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png', 
             {frameWidth: 100, frameHeight: 100});
