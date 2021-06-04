@@ -9,9 +9,21 @@ class Levels extends Phaser.Scene {
         this.load.image('Lv01', 'assets/art/Level01.png');
         this.load.image('Lv02', 'assets/art/Level02.png');
         this.load.image('Lv03', 'assets/art/Level03.png');
+        this.load.image('Home', 'assets/art/HouseIcon.png');
     }
 
     create() {
+        this.homeDisp = this.add.image(720,
+            100, "Home");
+        this.homeDisp.setScale(0.02);
+        this.homeDisp.setInteractive();
+        this.homeDisp.on("pointerdown", () => {
+            this.scene.stop();
+            this.scene.start("menu");
+            // console.log("test");
+            // this.scene.stop();
+        }); 
+
         this.one = this.add.image(100, 220, 'Lv01');
         this.two = this.add.image(155, 220, 'Lv02');
         this.three = this.add.image(210, 220, 'Lv03');

@@ -7,7 +7,7 @@ class LevelComplete extends Phaser.Scene {
 
     }
     create() {
-                let levelConfig = {
+        let levelConfig = {
             // fontFamily: 'Arial Black',
             fontSize: '32px',
             // backgroundColor: '#F3B141',
@@ -19,13 +19,33 @@ class LevelComplete extends Phaser.Scene {
             },
             // fixedWidth: 100
         }
-        this.lev = this.add.text(200, 150, "Level One Complete.", levelConfig);
+
+        let levelName = "";
+        console.log(currLevel);
+        switch(currLevel) {
+            case 1:
+                levelName = "One";
+                this.input.on("pointerdown", () => {
+                    this.scene.start("levelTwo");
+                });
+                break;
+            case 2:
+                levelName = "Two";
+                this.input.on("pointerdown", () => {
+                    this.scene.start("levelThree");
+                });
+                break;
+            case 3: 
+                levelName = "Three";
+
+                break;
+        }
+
+        this.lev = this.add.text(200, 150, "Level " + levelName + " Complete.", levelConfig);
 
         this.add.text(200, 300, "Click anywhere on the screen to continue");
 
-        this.input.on("pointerdown", () => {
-            this.scene.start("levelTwo");
-        });
+
     }
     update() {
 

@@ -10,6 +10,8 @@ class Pause extends Phaser.Scene {
     }
 
     create(){
+        console.log(currLevel);
+
         this.resume = this.add.image(720, 50, 'Pause');
         let pauseConfig = {
             fontFamily: 'Arial Black',
