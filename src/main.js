@@ -7,8 +7,9 @@ let config = {
     type: Phaser.CANVAS,
     width: widthScreen,
     height: heightScreen,
-    scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver, Two],
+    // scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver, Two],
     // scene: [One, Pause, LevelComplete, GameOver, Two], // Debug
+    scene: [Two, Pause, LevelComplete, GameOver],
     physics: {
         default: 'arcade',
         arcade: {
@@ -22,7 +23,7 @@ let config = {
 let game = new Phaser.Game(config);
 
 // Initialize the keys used to play the game.
-let UP, DOWN, RIGHT, LEFT;
+let UP, DOWN, RIGHT, LEFT, ONE, TWO, THREE;
 
 // playMusic[0] = main menu music.
 // playMusic[1] = gameplay music.

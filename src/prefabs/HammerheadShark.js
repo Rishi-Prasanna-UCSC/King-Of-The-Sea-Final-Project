@@ -1,39 +1,54 @@
-class HammerheadShark extends Phaser.GameObjects.Sprite {
+class HammerheadShark extends Player {
     constructor(scene, x, y, texture, frame){
         super(scene, x, y, texture, frame);
         scene.add.existing(this);
+        scene.physics.add.existing(this);
 
-        this.startX;
-        this.endX;
-        this.dir = 1;
-        this.movement = 'horizontal';
-    }
-
-    setMovement(str) {
-        this.movement = str;
+        this.lives = 3;
+        this.lifeNumChanged = false;
+        this.dead = false;
+        this.immobilized = false;
+        this.hurt = 0;
     }
 
     update(){
-        // If you're going right,
-        // If you are beyond the right point,
-        // Then turn around.
-        // Else, keep swimming right.
-        if (this.dir == 1) {
-            if (this.x >= this.endX) {
-                this.dir = 0;
+        if ((!this.dead) && (!this.immobilized)) {
+            if (this.hurt > 0) {
+                this.hurt--;
+                if ((this.hurt % 4 == 0) || (this.hurt % 4 == 1)) {
+                    this.setVisible(true);
+                }
+                else if ((this.hurt % 4 == 2) || (this.hurt % 4 == 3)) {
+                    this.setVisible(false);
+                }
             }
-            else if (this.x < this.endX) {
-                this.flipX = true;
-                this.x += 5;
-            }
-        }
-        else if (this.dir == 0) {
-            if (this.x <= this.startX) {
-                this.dir = 1;
-            }
-            else if (this.x > this.startX) {
+            if (Phaser.Input.Keyboard.JustDown(LEFT)) {
                 this.flipX = false;
-                this.x -= 5;
+                this.setBodySize(275, 100);
+                this.angle = 0;
+                this.setVelocityY(0);
+                this.setVelocityX(-swimSpeed);
+            }
+            else if (Phaser.Input.Keyboard.JustDown(RIGHT)) {
+                this.flipX = true;
+                this.setBodySize(275, 100);
+                this.angle = 0;
+                this.setVelocityY(0);
+                this.setVelocityX(swimSpeed);
+            }
+            else if (Phaser.Input.Keyboard.JustDown(UP)) {
+                this.flipX = true;
+                this.setBodySize(100, 275);
+                this.angle = 270;
+                this.setVelocityX(0);
+                this.setVelocityY(-swimSpeed);
+            }
+            else if (Phaser.Input.Keyboard.JustDown(DOWN)) {
+                this.flipX = false;
+                this.setBodySize(100, 275);
+                this.angle = 270;
+                this.setVelocityX(0);
+                this.setVelocityY(swimSpeed);
             }
         }
     }

@@ -34,6 +34,9 @@ class One extends Phaser.Scene {
     create(){
         this.add.image(0, 0, 'BG').setOrigin(0);
 
+        this.saveX;
+        this.saveY;
+
         //Key Controls
         UP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         LEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -55,6 +58,8 @@ class One extends Phaser.Scene {
 
         //creating player
         this.p1Fish = new Fish(this, 320, 320, "fish");
+        this.p1Fish.setScale(0.5);
+        this.p1Fish.anims.play('FishSwimming');
 
 
         // Swimming Fish Animation.
@@ -233,8 +238,7 @@ class One extends Phaser.Scene {
 
 
 
-        this.p1Fish.setScale(0.5);
-        this.p1Fish.anims.play('FishSwimming');
+        
 
 
         
