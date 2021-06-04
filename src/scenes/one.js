@@ -32,6 +32,8 @@ class One extends Phaser.Scene {
     }
 
     create(){
+        currLevel = 1;
+
         this.add.image(0, 0, 'BG').setOrigin(0);
 
         this.saveX;
