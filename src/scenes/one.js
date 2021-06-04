@@ -15,6 +15,10 @@ class One extends Phaser.Scene {
             {frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('blueShark', 'assets/character/blueSharkSpritesheet.png',
             {frameWidth: 736, frameHeight: 258});
+        this.load.spritesheet('hammerheadSharkH', 'assets/character/HammerheadSpritesheetH.png',
+            {frameWidth: 630, frameHeight: 322});
+        this.load.spritesheet('hammerheadSharkV', 'assets/character/HammerheadSpritesheetV.png',
+            {frameWidth: 324, frameHeight: 532});
         
         // Transformation gem...probably to be used as the finish line.
         this.load.image('gemT', 'assets/sprites/TransformGem.png');
@@ -96,6 +100,24 @@ class One extends Phaser.Scene {
                 start: 2, end: 2
             }),
             frameRate: 2.5,
+        });
+        // Hammerhead shark swimming horizontally.
+        this.anims.create({
+            key: 'hammerheadSharkSwimH',
+            frames: this.anims.generateFrameNumbers('hammerheadSharkH', {
+                start: 0, end: 1
+            }),
+            frameRate: 2.5,
+            repeat: -1
+        });
+        // Hammerhead shark swimming horizontally.
+        this.anims.create({
+            key: 'hammerheadSharkSwimV',
+            frames: this.anims.generateFrameNumbers('hammerheadSharkV', {
+                start: 0, end: 1
+            }),
+            frameRate: 2.5,
+            repeat: -1
         });
 
 
