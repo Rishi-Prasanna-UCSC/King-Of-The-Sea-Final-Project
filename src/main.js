@@ -7,13 +7,14 @@ let config = {
     type: Phaser.CANVAS,
     width: widthScreen,
     height: heightScreen,
-    // scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver],
-    scene: [One, Pause, LevelComplete, GameOver, Two], // Debug
+    // scene: [Intro, Menu, Levels, One, Pause, Tutorial, LevelComplete, GameOver, Two],
+    // scene: [One, Pause, LevelComplete, GameOver, Two], // Debug
+    scene: [Two, Pause, LevelComplete, GameOver],
     physics: {
         default: 'arcade',
         arcade: {
-            // debug: false
-            debug: true
+            debug: false
+            // debug: true
         }
     }
 }
@@ -22,7 +23,7 @@ let config = {
 let game = new Phaser.Game(config);
 
 // Initialize the keys used to play the game.
-let UP, DOWN, RIGHT, LEFT;
+let UP, DOWN, RIGHT, LEFT, ONE, TWO, THREE;
 
 // playMusic[0] = main menu music.
 // playMusic[1] = gameplay music.
@@ -32,3 +33,11 @@ let swimSpeed = 400;
 
 // If a level is failed, set this to the number of the level that was failed.
 let numLevelFailed = 0;
+
+let currLevel = 0;
+
+// Whether each creature is unlocked.
+// unlocked[0] = fish.
+// unlocked[1] = octopus, or shark.
+// unlocked[2] = big shark.
+let unlocked = [true, false, false];

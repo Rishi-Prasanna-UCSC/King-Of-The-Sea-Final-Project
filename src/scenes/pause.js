@@ -34,15 +34,35 @@ class Pause extends Phaser.Scene {
         this.resume.setInteractive();
         this.homeDisp.setInteractive();
 
-        this.resume.on("pointerdown", () => {
-            this.scene.stop();
-            this.scene.resume("levelOne");
-            // console.log("test");
-            // this.scene.stop();
-        });
+        if (currLevel == 1){
+            this.resume.on("pointerdown", () => {
+                this.scene.stop();
+                this.scene.resume("levelOne");
+                // console.log("test");
+                // this.scene.stop();
+            });
+        }
+        else if (currLevel == 2){
+            this.resume.on("pointerdown", () => {
+                this.scene.stop();
+                this.scene.resume("levelTwo");
+                // console.log("test");
+                // this.scene.stop();
+            });
+        }
+        else {
+            this.resume.on("pointerdown", () => {
+                this.scene.stop();
+                this.scene.resume("levelThree");
+                // console.log("test");
+                // this.scene.stop();
+            });
+        }
+
+
 
         this.homeDisp.on("pointerdown", () => {
-            this.scene.stop("levelOne");
+            this.scene.stop();
             this.scene.start("menu");
             // console.log("test");
             // this.scene.stop();
