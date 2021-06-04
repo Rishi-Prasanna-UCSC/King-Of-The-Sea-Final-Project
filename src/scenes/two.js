@@ -32,6 +32,9 @@ class Two extends Phaser.Scene {
     }
 
     create(){
+
+        currLevel = 2;
+
         this.add.image(0, 0, 'BG').setOrigin(0);
 
         //Key Controls

@@ -37,8 +37,9 @@ class Pause extends Phaser.Scene {
         if (currLevel == 1){
             this.resume.on("pointerdown", () => {
                 this.scene.stop();
+                
                 this.scene.resume("levelOne");
-                // console.log("test");
+                
                 // this.scene.stop();
             });
         }
