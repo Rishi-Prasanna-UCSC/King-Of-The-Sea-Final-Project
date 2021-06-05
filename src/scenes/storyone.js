@@ -25,7 +25,7 @@ class StoryOne extends Phaser.Scene {
 
         });
 
-        this.time.delayedCall(2600, () => {
+        this.time.delayedCall(2300, () => {
             // this.cameras.main.fadeIn(1000, 0, 0, 0)
             this.add.text(200, 340, "Click anywhere on the screen to continue").setColor('#00F000');
         }, null, this);
