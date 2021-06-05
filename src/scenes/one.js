@@ -32,7 +32,7 @@ class One extends Phaser.Scene {
     }
 
     create(){
-        this.scene.start("levelComplete"); //debug
+        // this.scene.start("levelComplete"); //debug
 
         currLevel = 1;
 
@@ -63,7 +63,7 @@ class One extends Phaser.Scene {
         //creating player
         this.p1Fish = new Fish(this, 320, 320, "fish");
         this.p1Fish.setScale(0.5);
-        this.p1Fish.anims.play('FishSwimming');
+    
 
 
         // Swimming Fish Animation.
@@ -75,6 +75,7 @@ class One extends Phaser.Scene {
             frameRate: 5,
             repeat: -1
         });
+        this.p1Fish.anims.play('FishSwimming');
         // Clam mouth is already open.
         this.anims.create({
             key: 'clamMouthOpen',

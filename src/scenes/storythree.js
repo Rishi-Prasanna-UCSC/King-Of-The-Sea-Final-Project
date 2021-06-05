@@ -1,4 +1,4 @@
-class StoryTwo extends Phaser.Scene {
+class StoryThree extends Phaser.Scene {
     constructor() {
         super("storyTwo");
     }
@@ -9,18 +9,19 @@ class StoryTwo extends Phaser.Scene {
 
     create() {
         this.cameras.main.fadeIn(2000, 0, 0, 0);
-        this.add.text(250, 100, "I was once a great white."); 
-        this.add.text(220, 140, "You know the ones I'm talking about."); 
-        this.add.text(200, 180, "They made a little known movie about me?");
-        this.add.text(230, 220, "Sound familiar? Starts with a J?");
-        this.add.text(90, 260, "I guess that fame caused me to bite off more than I could chew...");
-        this.add.text(90, 300, "Because, a moment later... Poof! I was some bottom feeding herring.");
+        this.add.text(280, 100, "So that's my life story."); 
+        this.add.text(285, 140, "I'm now some puny fish"); 
+        this.add.text(220, 180, "because some magic sea king was pissy.");
+        this.add.text(280, 220, "So, what's next for me?");
+        this.add.text(170, 260, "I'm going to slowly climb back up the food chain, ");
+        this.add.text(180, 300, "and I'll show him what a real king looks like.");
 
         this.input.on('pointerdown', () => {
             // fade to black
             this.cameras.main.fadeOut(1000, 0, 0, 0)
             this.time.delayedCall(1000, () => {
-                this.scene.start("storyThree");
+                this.scene.start("levelOne");
+                console.log("test");
             }, null, this);
 
         });

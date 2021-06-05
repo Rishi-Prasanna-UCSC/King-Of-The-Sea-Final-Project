@@ -14,7 +14,7 @@ class StoryTwo extends Phaser.Scene {
         this.add.text(200, 180, "They made a little known movie about me?");
         this.add.text(230, 220, "Sound familiar? Starts with a J?");
         this.add.text(90, 260, "I guess that fame caused me to bite off more than I could chew...");
-        this.add.text(90, 300, "Because, a moment later... Poof I was some bottom feeding herring.");
+        this.add.text(130, 300, "A moment later... Poof I was some bottom feeding herring.");
 
         this.input.on('pointerdown', () => {
             // fade to black
