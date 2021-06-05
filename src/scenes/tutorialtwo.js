@@ -63,7 +63,7 @@ class TutorialTwo extends Phaser.Scene {
         
 
 
-        this.add.text(200, 340, "Click anywhere on the screen to continue");
+        this.add.text(200, 340, "Click anywhere on the screen to continue").setColor('#00F000');
 
         this.input.on("pointerdown", () => {
             this.scene.start("menu");

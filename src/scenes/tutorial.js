@@ -25,7 +25,7 @@ class Tutorial extends Phaser.Scene {
 
         this.home = this.add.text(190, 280, "Want to restart? Hit the home button below!");
 
-        this.add.text(180, 340, "Click anywhere on the screen for more information");
+        this.add.text(180, 340, "Click anywhere on the screen for more information").setColor('#00F000');
 
         this.input.on("pointerdown", () => {
             this.scene.start("tutorialTwo");

@@ -93,7 +93,7 @@ class Menu extends Phaser.Scene {
         this.tutorial.setInteractive();
 
         this.play.on('pointerdown', () => {
-            this.scene.start("levelOne");
+            this.scene.start("storyOne");
         });
 
         this.levels.on('pointerdown', () => {
