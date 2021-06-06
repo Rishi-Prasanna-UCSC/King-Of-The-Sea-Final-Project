@@ -64,6 +64,7 @@ class Three extends Phaser.Scene {
 
         //creating player
         this.p1Fish = new HammerheadShark(this, 320, 320, "hammerheadSharkH");
+        this.currLives = 3;
 
         this.saveX;
         this.saveY;
@@ -271,10 +272,7 @@ class Three extends Phaser.Scene {
         });
         this.pause.setScrollFactor(0);
 
-        this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
-        this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
-        this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
-        this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        this.addCollisions();
 
 
 
@@ -379,32 +377,39 @@ class Three extends Phaser.Scene {
             this.p1Fish = new Fish(this, this.saveX, this.saveY, "fish");
             this.p1Fish.setScale(0.5);
             this.p1Fish.anims.play('FishSwimming');
+            this.p1Fish.lives = this.currLives;
             this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
             // set camera dead zone
             this.cameras.main.setDeadzone(100, 50);
             this.cameras.main.setName("center");
 
-            this.physics.add.collider(this.p1Fish, this.rockGroup);
-            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
-            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
-            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
-            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+            this.addCollisions();
         }
         else if (Phaser.Input.Keyboard.JustDown(TWO)) {
             this.p1Fish.destroy();
             this.p1Fish = new HammerheadShark(this, this.saveX, this.saveY, "hammerheadSharkH");
             this.p1Fish.setScale(0.5);
             this.p1Fish.anims.play('HammerSwimming');
+            this.p1Fish.lives = this.currLives;
             this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
             // set camera dead zone
             this.cameras.main.setDeadzone(100, 50);
             this.cameras.main.setName("center");
 
-            this.physics.add.collider(this.p1Fish, this.rockGroup);
-            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
-            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
-            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
-            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+            this.addCollisions();
+        }
+        else {
+            //set up for when greatwhite has assets
+
+            // this.p1Fish.destroy();
+            // this.p1Fish = new GreatWhiteShark(this, this.saveX, this.saveY, "");
+            // this.p1Fish.setScale(0.5);
+            // this.p1Fish.anims.play("");
+            // this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
+            // this.cameras.main.setDeadzone(100, 50);
+            // this.cameras.main.setName("center");
+
+            // this.addCollisions();
         }
 
         for (let i = 0; i < this.BSharksGroup.children.entries.length; i++) {
@@ -425,6 +430,14 @@ class Three extends Phaser.Scene {
                 this.scene.start("gameOver");
             }, null, this);
         }
+    }
+
+    addCollisions(){
+        this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
+            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
     }
 
     updateHearts(triggerDead) {
@@ -500,6 +513,7 @@ class Three extends Phaser.Scene {
     touchedClam(fish, clam) {
         if (fish.hurt == 0) {
             if (fish.lives > 0) {
+                this.currLives--;
                 fish.lives--;
                 fish.lifeNumChanged = true;
                 fish.hurt = 200;
@@ -511,6 +525,7 @@ class Three extends Phaser.Scene {
     touchedBShark(fish, shark) {
         if (fish.hurt == 0) {
             if (fish.lives > 1) {
+                this.currLives--;
                 fish.lives--;
                 fish.hurt = 200;
                 fish.lifeNumChanged = true;

@@ -62,6 +62,7 @@ class Two extends Phaser.Scene {
 
         //creating player
         this.p1Fish = new HammerheadShark(this, 320, 320, "hammerheadSharkH");
+        this.currLives = 3;
 
         this.saveX;
         this.saveY;
@@ -377,6 +378,7 @@ class Two extends Phaser.Scene {
             this.p1Fish = new Fish(this, this.saveX, this.saveY, "fish");
             this.p1Fish.setScale(0.5);
             this.p1Fish.anims.play('FishSwimming');
+            this.p1Fish.lives = this.currLives;
             this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
             // set camera dead zone
             this.cameras.main.setDeadzone(100, 50);
@@ -393,6 +395,7 @@ class Two extends Phaser.Scene {
             this.p1Fish = new HammerheadShark(this, this.saveX, this.saveY, "hammerheadSharkH");
             this.p1Fish.setScale(0.5);
             this.p1Fish.anims.play('HammerSwimming');
+            this.p1Fish.lives = this.currLives;
             this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
             // set camera dead zone
             this.cameras.main.setDeadzone(100, 50);
@@ -498,6 +501,7 @@ class Two extends Phaser.Scene {
     touchedClam(fish, clam){
         if (fish.hurt == 0) {
             if (fish.lives > 0) {
+                this.currLives--;
                 fish.lives--;
                 fish.lifeNumChanged = true;
                 fish.hurt = 200;
@@ -509,6 +513,7 @@ class Two extends Phaser.Scene {
     touchedBShark(fish, shark) {
         if (fish.hurt == 0) {
             if (fish.lives > 1) {
+                this.currLives--;
                 fish.lives--;
                 fish.hurt = 200;
                 fish.lifeNumChanged = true;

@@ -1,10 +1,11 @@
 class Fish extends Player {
-    constructor (scene, x, y, texture, frame){
-        super(scene, x, y, texture, frame);
+    constructor (scene, x, y, texture, frame/*, life*/){
+        super(scene, x, y, texture, frame/*, life*/);
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
         this.lives = 3;
+        // this.lives = life;
         this.lifeNumChanged = false;
         this.dead = false;
         this.immobilized = false;
