@@ -35,7 +35,7 @@ class Three extends Phaser.Scene {
 
         currLevel = 3;
 
-        this.scene.start("levelComplete"); //debug
+        // this.scene.start("levelComplete"); //debug
 
         this.add.image(0, 0, 'BG').setOrigin(0);
 
