@@ -22,6 +22,9 @@ class LevelComplete extends Phaser.Scene {
 
         let levelName = "";
         console.log(currLevel);
+
+        // currLevel = 3; //debug
+
         switch(currLevel) {
             case 1:
                 levelName = "One";
@@ -31,12 +34,15 @@ class LevelComplete extends Phaser.Scene {
                 break;
             case 2:
                 levelName = "Two";
+                this.add.text(100, 240, "You've unlocked the Hammerhead! Use 1 and 2 to switch between forms.");
+                
                 this.input.on("pointerdown", () => {
                     this.scene.start("levelThree");
                 });
                 break;
             case 3: 
                 levelName = "Three";
+                this.add.text(60, 240, "You've unlocked the Great White! Use 1, 2, and 3 to switch between forms.");
                 this.input.on("pointerdown", () => {
                     this.scene.start("victory");
                 });
@@ -45,7 +51,7 @@ class LevelComplete extends Phaser.Scene {
 
         this.lev = this.add.text(200, 150, "Level " + levelName + " Complete.", levelConfig);
 
-        this.add.text(200, 300, "Click anywhere on the screen to continue");
+        this.add.text(200, 300, "Click anywhere on the screen to continue").setColor("#00F000");
 
 
     }
