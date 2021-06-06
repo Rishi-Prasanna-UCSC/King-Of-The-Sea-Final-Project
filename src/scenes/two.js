@@ -420,7 +420,7 @@ class Two extends Phaser.Scene {
             }
         }
         else {
-            numLevelFailed = 1;
+            numLevelFailed = 2;
             this.p1Fish.destroy();
             this.time.delayedCall(2800, () => {
                 this.scene.start("gameOver");
