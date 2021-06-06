@@ -1,6 +1,6 @@
-class One extends Phaser.Scene {
+class Three extends Phaser.Scene {
     constructor() {
-        super("levelOne");
+        super("levelThree");
     }
 
     preload() {
@@ -32,20 +32,22 @@ class One extends Phaser.Scene {
     }
 
     create() {
-        currLevel = 1;
 
-        // this.scene.start("levelComplete"); //debug
+        currLevel = 3;
+
+        this.scene.start("levelComplete"); //debug
 
         this.add.image(0, 0, 'BG').setOrigin(0);
-
-        this.saveX;
-        this.saveY;
 
         //Key Controls
         UP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         LEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         DOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         RIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        ONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        TWO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+        THREE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+
 
 
         //create groups
@@ -61,10 +63,10 @@ class One extends Phaser.Scene {
         this.helGemGroup = this.physics.add.group();
 
         //creating player
-        this.p1Fish = new Fish(this, 320, 320, "fish");
-        this.p1Fish.setScale(0.5);
+        this.p1Fish = new HammerheadShark(this, 320, 320, "hammerheadSharkH");
 
-
+        this.saveX;
+        this.saveY;
 
         // Swimming Fish Animation.
         this.anims.create({
@@ -75,7 +77,14 @@ class One extends Phaser.Scene {
             frameRate: 5,
             repeat: -1
         });
-        this.p1Fish.anims.play('FishSwimming');
+        this.anims.create({
+            key: 'HammerSwimming',
+            frames: this.anims.generateFrameNumbers('hammerheadSharkH', {
+                start: 0, end: 1
+            }),
+            frameRate: 5,
+            repeat: -1
+        });
         // Clam mouth is already open.
         this.anims.create({
             key: 'clamMouthOpen',
@@ -183,6 +192,7 @@ class One extends Phaser.Scene {
         // Much easier format.
         // x, y
         let clamArr = [
+            /*
             520, 320,
             920, 1720,
             1320, 1720,
@@ -190,6 +200,7 @@ class One extends Phaser.Scene {
             3120, 520,
             520, 3120,
             1320, 3120,
+            */
         ];
 
         // Blue Shark Guards.
@@ -243,7 +254,8 @@ class One extends Phaser.Scene {
 
 
 
-
+        this.p1Fish.setScale(0.5);
+        this.p1Fish.anims.play('HammerSwimming');
 
 
 
@@ -360,6 +372,41 @@ class One extends Phaser.Scene {
 
     update() {
         this.p1Fish.update();
+        this.saveX = this.p1Fish.x;
+        this.saveY = this.p1Fish.y;
+        if (Phaser.Input.Keyboard.JustDown(ONE)) {
+            this.p1Fish.destroy();
+            this.p1Fish = new Fish(this, this.saveX, this.saveY, "fish");
+            this.p1Fish.setScale(0.5);
+            this.p1Fish.anims.play('FishSwimming');
+            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
+            // set camera dead zone
+            this.cameras.main.setDeadzone(100, 50);
+            this.cameras.main.setName("center");
+
+            this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
+            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        }
+        else if (Phaser.Input.Keyboard.JustDown(TWO)) {
+            this.p1Fish.destroy();
+            this.p1Fish = new HammerheadShark(this, this.saveX, this.saveY, "hammerheadSharkH");
+            this.p1Fish.setScale(0.5);
+            this.p1Fish.anims.play('HammerSwimming');
+            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
+            // set camera dead zone
+            this.cameras.main.setDeadzone(100, 50);
+            this.cameras.main.setName("center");
+
+            this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
+            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        }
+
         for (let i = 0; i < this.BSharksGroup.children.entries.length; i++) {
             this.BSharksGroup.children.entries[i].update();
         }

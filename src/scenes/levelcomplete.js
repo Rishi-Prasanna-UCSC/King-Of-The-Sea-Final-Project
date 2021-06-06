@@ -37,7 +37,9 @@ class LevelComplete extends Phaser.Scene {
                 break;
             case 3: 
                 levelName = "Three";
-
+                this.input.on("pointerdown", () => {
+                    this.scene.start("victory");
+                });
                 break;
         }
 
