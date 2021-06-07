@@ -128,15 +128,6 @@ class Two extends Phaser.Scene {
             frameRate: 2.5,
             repeat: -1
         });
-        // Hammerhead shark swimming horizontally.
-        this.anims.create({
-            key: 'hammerheadSharkSwimV',
-            frames: this.anims.generateFrameNumbers('hammerheadSharkV', {
-                start: 0, end: 1
-            }),
-            frameRate: 2.5,
-            repeat: -1
-        });
 
 
 
@@ -160,7 +151,7 @@ class Two extends Phaser.Scene {
         // Much easier format.
         // x, y
         let clamArr = [
-            /*
+            
             520, 320,
             920, 1720,
             1320, 1720,
@@ -168,7 +159,7 @@ class Two extends Phaser.Scene {
             3120, 520,
             520, 3120,
             1320, 3120,
-            */
+            
         ];
 
         // Blue Shark Guards.
