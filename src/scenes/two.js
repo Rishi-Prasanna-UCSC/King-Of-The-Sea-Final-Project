@@ -149,13 +149,21 @@ class Two extends Phaser.Scene {
             // top right.
             false, 'r', 2520, 3520, 920,
             false, 'c', 2520, 520, 720,
+            false, 'r', 1720, 2320, 720,
+            true, 'c', 1720, 320, 520,
 
+            // top left.
+            false, 'r', 520, 920, 720,
+            true, 'r', 1120, 1320, 720,
+            false, 'i', 1520, 720, 0,
+            false, 'c', 520, 720, 1320,
+            false, 'i', 320, 1320, 0,
         ];
 
         // Much easier format.
         // x, y
         let clamArr = [
-            520, 320,
+            720, 520,
             920, 1720,
             1320, 1720,
             2120, 520,
@@ -170,7 +178,8 @@ class Two extends Phaser.Scene {
             540, 1120, 2720,
             540, 2120, 3020,
             2020, 2920, 3320,
-            1920, 3320, 340,
+            2120, 3320, 340,
+            440, 1320, 540,
         ];
 
 
@@ -194,7 +203,7 @@ class Two extends Phaser.Scene {
         finish.body.immovable = true;
         finish.body.allowGravity = false;
         
-        let health = this.physics.add.sprite(320, 3520, 'gemH');
+        let health = this.physics.add.sprite(320, 1120, 'gemH');
         this.helGemGroup.add(health);
         health.setScale(0.65);
         health.body.immovable = true;
@@ -334,7 +343,7 @@ class Two extends Phaser.Scene {
             }
             else if (arr[i+1] == 'i') {
                 if (arr[i]) {this.spawnInd(bGroup, arr[i+2], arr[i+3], true);}
-                else {this.spawnInd(group, arr[i+2], arr[i+3], true);}
+                else {this.spawnInd(group, arr[i+2], arr[i+3], false);}
             }
         }
     }
