@@ -8,6 +8,7 @@ class Two extends Phaser.Scene {
         this.load.image('BG', 'assets/art/PlayBackground.png');
 
         this.load.image('rock', 'assets/sprites/rock.png');
+        this.load.image('break', 'assets/sprites/breakableRock.png');
 
         this.load.spritesheet('fish', 'assets/character/fishSpritesheet.png',
             {frameWidth: 275, frameHeight: 100});
@@ -51,6 +52,7 @@ class Two extends Phaser.Scene {
         //create groups
         // Walls
         this.rockGroup = this.physics.add.group();
+        this.bRockGroup = this.physics.add.group();
 
         // Enemies
         this.clamsGroup = this.physics.add.group();
@@ -148,44 +150,10 @@ class Two extends Phaser.Scene {
         // 'c', x, lowY, highY    -> create column.
         // 'i', x, y, 0           -> create individual cell.
         let wallArr = [
-            'r', 120, 3720, 120,
-            'c', 120, 320, 3720,
-            'r', 320, 3720, 3720,
-            'c', 3720, 320, 3520,
-
-            // top left section.
-            'r', 520, 1220, 520,
-            'r', 320, 1220, 920,
-            'i', 1520, 320, 0,
-            'c', 1520, 720, 1720,
-
-            // middle left section.
-            'r', 520, 1220, 1320,
-            'r', 520, 1420, 1920,
-            'c', 720, 1720, 2520,
-
-            // bottom left section.
-            'r', 320, 1520, 3320,
-            'c', 1520, 2120, 2720,
-
-            // middle section.
-            'r', 1720, 1920, 2520,
-            'r', 2320, 2520, 2520,
-            'i', 3120, 2520, 0,
-            'c', 2520, 2720, 3120,
-            'c', 3320, 2520, 3520,
-            'c', 2320, 2120, 2320,
-            'c', 2120, 720, 1920,
-            'c', 2320, 720, 1920,
-            'i', 1920, 920, 0,
-            'i', 1720, 1320, 0,
-            'i', 1920, 1720, 0,
-
-            // top right section.
-            'r', 2520, 3320, 720,
-            'r', 2720, 3320, 1120,
-            'r', 2520, 3320, 1520,
-            'r', 2720, 3520, 1920,
+            true, 'r', 120, 3720, 120,
+            false, 'c', 120, 320, 3720,
+            false, 'r', 320, 3720, 3720,
+            false, 'c', 3720, 320, 3520,
         ];
 
         // Much easier format.
@@ -213,7 +181,7 @@ class Two extends Phaser.Scene {
 
 
         
-        this.spawnWalls(this.rockGroup, wallArr);
+        this.spawnWalls(this.rockGroup, this.bRockGroup, wallArr);
         this.spawnClams(this.clamsGroup, clamArr);
         this.spawnBSharks(this.BSharksGroup, BSharkArr);
 
@@ -221,6 +189,7 @@ class Two extends Phaser.Scene {
 
 
         this.physics.add.collider(this.p1Fish, this.rockGroup);
+        this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
 
         
 
@@ -274,14 +243,15 @@ class Two extends Phaser.Scene {
         this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
         this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
         this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        
 
 
 
         // Create camera.
         this.cameras.main.setBounds(0, 0, 4000, 4000);
 
-        this.cameras.main.setZoom(1); // Real
-        // this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
+        // this.cameras.main.setZoom(1); // Real
+        this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
         // have camera follow copter
         // startFollow(target [, roundPixels] [, lerpX] [, lerpY] [, offsetX] [, offsetY])
         this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
@@ -290,52 +260,63 @@ class Two extends Phaser.Scene {
         this.cameras.main.setName("center");
     }
 
-    spawnWalls(group, arr) {
-        for (let i = 0; i < arr.length; i += 4) {
-            if (arr[i] == 'r') {
+    spawnWalls(group, bGroup, arr) {
+        for (let i = 0; i < arr.length; i += 5) {
+            if (arr[i+1] == 'r') {
                 let row = [];
-                row.push(arr[i+1], arr[i+2], arr[i+3]);
-                this.spawnRow(group, row);
+                row.push(arr[i+2], arr[i+3], arr[i+4]);
+                if (arr[i]) {this.spawnRow(bGroup, row, true);}
+                else {this.spawnRow(group, row, false);}
             }
-            else if (arr[i] == 'c') {
+            else if (arr[i+1] == 'c') {
                 let col = [];
-                col.push(arr[i+1], arr[i+2], arr[i+3]);
-                this.spawnCol(group, col);
+                col.push(arr[i+2], arr[i+3], arr[i+4]);
+                if (arr[i]) {this.spawnCol(bGroup, col, true);}
+                else {this.spawnCol(group, col, false);}
             }
-            else if (arr[i] == 'i') {
-                this.spawnInd(group, arr[i+1], arr[i+2]);
+            else if (arr[i+1] == 'i') {
+                if (arr[i]) {this.spawnInd(bGroup, arr[i+2], arr[i+3], true);}
+                else {this.spawnInd(group, arr[i+2], arr[i+3], true);}
             }
         }
     }
 
-    spawnRow(group, arr) {
+    spawnRow(group, arr, breakable) {
         // arr[0] = low X.
         // arr[1] = high X.
         // arr[2] = y.
 
         for (let i = arr[0]; i <= arr[1]; i += 200) {
-            let rock1 = this.physics.add.sprite(i, arr[2], "rock");
+            let rock1;
+            if (breakable) {rock1 = this.physics.add.sprite(i, arr[2], "break");}
+            else {rock1 = this.physics.add.sprite(i, arr[2], "rock");}
             group.add(rock1);
             rock1.setScale(2);
             rock1.body.immovable = true;
             rock1.body.allowGravity = false;
         }
     }
-    spawnCol(group, arr) {
+    spawnCol(group, arr, breakable) {
         // arr[0] = x.
         // arr[1] = low Y.
         // arr[2] = high Y.
 
         for (let i = arr[1]; i <= arr[2]; i += 200) {
-            let rock1 = this.physics.add.sprite(arr[0], i, "rock");
+            let rock1;
+            if (breakable) {rock1 = this.physics.add.sprite(arr[0], i, "break");}
+            else {rock1 = this.physics.add.sprite(arr[0], i, "rock");}
+            
             group.add(rock1);
             rock1.setScale(2);
             rock1.body.immovable = true;
             rock1.body.allowGravity = false;
         }
     }
-    spawnInd(group, x, y) {
-        let rock1 = this.physics.add.sprite(x, y, "rock");
+    spawnInd(group, x, y, breakable) {
+        let rock1;
+        if (breakable) {rock1 = this.physics.add.sprite(x, y, "break");}
+        else {rock1 = this.physics.add.sprite(x, y, "rock");}
+        
         group.add(rock1);
         rock1.setScale(2);
         rock1.body.immovable = true;
@@ -369,6 +350,15 @@ class Two extends Phaser.Scene {
         }
     }
 
+    breakWall(fish, bWall) {
+        if (fish.type == 'hshark') {
+            bWall.destroy();
+        }
+        else {
+            // Do nothing.
+        }
+    }
+
     update(){
         this.p1Fish.update();
         this.saveX = this.p1Fish.x;
@@ -379,12 +369,14 @@ class Two extends Phaser.Scene {
             this.p1Fish.setScale(0.5);
             this.p1Fish.anims.play('FishSwimming');
             this.p1Fish.lives = this.currLives;
+            
             this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
             // set camera dead zone
             this.cameras.main.setDeadzone(100, 50);
             this.cameras.main.setName("center");
 
             this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
             this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
             this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
             this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
@@ -402,6 +394,7 @@ class Two extends Phaser.Scene {
             this.cameras.main.setName("center");
 
             this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
             this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
             this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
             this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);

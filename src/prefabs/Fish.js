@@ -10,6 +10,9 @@ class Fish extends Player {
         this.dead = false;
         this.immobilized = false;
         this.hurt = 0;
+
+        // Check which creature it is.
+        this.type = 'fish';
     }
 
     update(){
