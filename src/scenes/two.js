@@ -18,8 +18,6 @@ class Two extends Phaser.Scene {
             {frameWidth: 736, frameHeight: 258});
         this.load.spritesheet('hammerheadSharkH', 'assets/character/HammerheadSpritesheetH.png',
             {frameWidth: 630, frameHeight: 322});
-        this.load.spritesheet('hammerheadSharkV', 'assets/character/HammerheadSpritesheetV.png',
-            {frameWidth: 324, frameHeight: 532});
         
         // Transformation gem...probably to be used as the finish line.
         this.load.image('gemT', 'assets/sprites/TransformGem.png');
@@ -63,7 +61,7 @@ class Two extends Phaser.Scene {
         this.helGemGroup = this.physics.add.group();
 
         //creating player
-        this.p1Fish = new HammerheadShark(this, 320, 320, "hammerheadSharkH");
+        this.p1Fish = new HammerheadShark(this, 3320, 520, "hammerheadSharkH");
         this.currLives = 3;
 
         this.saveX;
@@ -150,10 +148,13 @@ class Two extends Phaser.Scene {
         // 'c', x, lowY, highY    -> create column.
         // 'i', x, y, 0           -> create individual cell.
         let wallArr = [
-            true, 'r', 120, 3720, 120,
+            // boundaries.
+            false, 'r', 120, 3720, 120,
             false, 'c', 120, 320, 3720,
             false, 'r', 320, 3720, 3720,
             false, 'c', 3720, 320, 3520,
+
+
         ];
 
         // Much easier format.
@@ -259,6 +260,67 @@ class Two extends Phaser.Scene {
         this.cameras.main.setDeadzone(100, 50);
         this.cameras.main.setName("center");
     }
+    update(){
+        this.p1Fish.update();
+        this.saveX = this.p1Fish.x;
+        this.saveY = this.p1Fish.y;
+        if (Phaser.Input.Keyboard.JustDown(ONE)) {
+            this.p1Fish.destroy();
+            this.p1Fish = new Fish(this, this.saveX, this.saveY, "fish");
+            this.p1Fish.setScale(0.5);
+            this.p1Fish.anims.play('FishSwimming');
+            this.p1Fish.lives = this.currLives;
+            
+            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
+            // set camera dead zone
+            this.cameras.main.setDeadzone(100, 50);
+            this.cameras.main.setName("center");
+
+            this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
+            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
+            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        }
+        else if (Phaser.Input.Keyboard.JustDown(TWO)) {
+            this.p1Fish.destroy();
+            this.p1Fish = new HammerheadShark(this, this.saveX, this.saveY, "hammerheadSharkH");
+            this.p1Fish.setScale(0.5);
+            this.p1Fish.anims.play('HammerSwimming');
+            this.p1Fish.lives = this.currLives;
+            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
+            // set camera dead zone
+            this.cameras.main.setDeadzone(100, 50);
+            this.cameras.main.setName("center");
+
+            this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
+            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
+            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        }
+
+        for (let i = 0; i < this.BSharksGroup.children.entries.length; i++) {
+            this.BSharksGroup.children.entries[i].update();
+        }
+        if (!this.p1Fish.dead) {
+            if (this.p1Fish.lifeNumChanged) {
+                
+                this.updateHearts(true);
+
+                this.p1Fish.lifeNumChanged = false;
+            }
+        }
+        else {
+            numLevelFailed = 2;
+            this.p1Fish.destroy();
+            this.time.delayedCall(2800, () => {
+                this.scene.start("gameOver");
+            }, null, this);
+        }
+    }
 
     spawnWalls(group, bGroup, arr) {
         for (let i = 0; i < arr.length; i += 5) {
@@ -359,68 +421,7 @@ class Two extends Phaser.Scene {
         }
     }
 
-    update(){
-        this.p1Fish.update();
-        this.saveX = this.p1Fish.x;
-        this.saveY = this.p1Fish.y;
-        if (Phaser.Input.Keyboard.JustDown(ONE)) {
-            this.p1Fish.destroy();
-            this.p1Fish = new Fish(this, this.saveX, this.saveY, "fish");
-            this.p1Fish.setScale(0.5);
-            this.p1Fish.anims.play('FishSwimming');
-            this.p1Fish.lives = this.currLives;
-            
-            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
-            // set camera dead zone
-            this.cameras.main.setDeadzone(100, 50);
-            this.cameras.main.setName("center");
-
-            this.physics.add.collider(this.p1Fish, this.rockGroup);
-            this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
-            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
-            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
-            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
-            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
-        }
-        else if (Phaser.Input.Keyboard.JustDown(TWO)) {
-            this.p1Fish.destroy();
-            this.p1Fish = new HammerheadShark(this, this.saveX, this.saveY, "hammerheadSharkH");
-            this.p1Fish.setScale(0.5);
-            this.p1Fish.anims.play('HammerSwimming');
-            this.p1Fish.lives = this.currLives;
-            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
-            // set camera dead zone
-            this.cameras.main.setDeadzone(100, 50);
-            this.cameras.main.setName("center");
-
-            this.physics.add.collider(this.p1Fish, this.rockGroup);
-            this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
-            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
-            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
-            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
-            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
-        }
-
-        for (let i = 0; i < this.BSharksGroup.children.entries.length; i++) {
-            this.BSharksGroup.children.entries[i].update();
-        }
-        if (!this.p1Fish.dead) {
-            if (this.p1Fish.lifeNumChanged) {
-                
-                this.updateHearts(true);
-
-                this.p1Fish.lifeNumChanged = false;
-            }
-        }
-        else {
-            numLevelFailed = 2;
-            this.p1Fish.destroy();
-            this.time.delayedCall(2800, () => {
-                this.scene.start("gameOver");
-            }, null, this);
-        }
-    }
-
+    
     updateHearts(triggerDead) {
         if (this.p1Fish.lives == 3) {
             this.heart3.destroy();
