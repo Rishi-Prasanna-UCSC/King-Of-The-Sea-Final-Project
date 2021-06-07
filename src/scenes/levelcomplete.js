@@ -29,20 +29,21 @@ class LevelComplete extends Phaser.Scene {
             case 1:
                 levelName = "One";
                 this.input.on("pointerdown", () => {
+                    this.add.text(100, 240, "You've unlocked the Hammerhead! Use 1 and 2 to switch between forms.");
                     this.scene.start("levelTwo");
                 });
                 break;
             case 2:
                 levelName = "Two";
-                this.add.text(100, 240, "You've unlocked the Hammerhead! Use 1 and 2 to switch between forms.");
                 
                 this.input.on("pointerdown", () => {
+                    this.add.text(60, 240, "You've unlocked the Great White! Use 1, 2, and 3 to switch between forms.");
                     this.scene.start("levelThree");
                 });
                 break;
             case 3: 
                 levelName = "Three";
-                this.add.text(60, 240, "You've unlocked the Great White! Use 1, 2, and 3 to switch between forms.");
+                this.add.text(60, 240, "Congratulations! You devoured the Sea King and have restored your rule across the Seven Seas!");
                 this.input.on("pointerdown", () => {
                     this.scene.start("victory");
                 });
