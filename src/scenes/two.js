@@ -66,6 +66,7 @@ class Two extends Phaser.Scene {
 
         this.saveX;
         this.saveY;
+        this.saveHurt;
 
         // Swimming Fish Animation.
         this.anims.create({
@@ -145,21 +146,22 @@ class Two extends Phaser.Scene {
             false, 'r', 320, 3720, 3720,
             false, 'c', 3720, 320, 3520,
 
+            // top right.
+            false, 'r', 2520, 3520, 920,
+            false, 'c', 2520, 520, 720,
 
         ];
 
         // Much easier format.
         // x, y
         let clamArr = [
-            
             520, 320,
             920, 1720,
             1320, 1720,
             2120, 520,
-            3120, 520,
+            3120, 720,
             520, 3120,
             1320, 3120,
-            
         ];
 
         // Blue Shark Guards.
@@ -255,9 +257,11 @@ class Two extends Phaser.Scene {
         this.p1Fish.update();
         this.saveX = this.p1Fish.x;
         this.saveY = this.p1Fish.y;
+        this.saveHurt = this.p1Fish.hurt;
         if (Phaser.Input.Keyboard.JustDown(ONE)) {
             this.p1Fish.destroy();
             this.p1Fish = new Fish(this, this.saveX, this.saveY, "fish");
+            this.p1Fish.hurt = this.saveHurt;
             this.p1Fish.setScale(0.5);
             this.p1Fish.anims.play('FishSwimming');
             this.p1Fish.lives = this.currLives;
@@ -277,6 +281,7 @@ class Two extends Phaser.Scene {
         else if (Phaser.Input.Keyboard.JustDown(TWO)) {
             this.p1Fish.destroy();
             this.p1Fish = new HammerheadShark(this, this.saveX, this.saveY, "hammerheadSharkH");
+            this.p1Fish.hurt = this.saveHurt;
             this.p1Fish.setScale(0.5);
             this.p1Fish.anims.play('HammerSwimming');
             this.p1Fish.lives = this.currLives;
@@ -411,7 +416,6 @@ class Two extends Phaser.Scene {
             // Do nothing.
         }
     }
-
     
     updateHearts(triggerDead) {
         if (this.p1Fish.lives == 3) {
@@ -484,14 +488,19 @@ class Two extends Phaser.Scene {
     }
 
     touchedClam(fish, clam){
-        if (fish.hurt == 0) {
-            if (fish.lives > 0) {
-                this.currLives--;
-                fish.lives--;
-                fish.lifeNumChanged = true;
-                fish.hurt = 200;
-                clam.anims.play('clamOpenAnim');
+        if (fish.type == 'fish') {
+            if (fish.hurt == 0) {
+                if (fish.lives > 0) {
+                    this.currLives--;
+                    fish.lives--;
+                    fish.lifeNumChanged = true;
+                    fish.hurt = 200;
+                    clam.anims.play('clamOpenAnim');
+                }
             }
+        }
+        else {
+            clam.destroy();
         }
     }
 
@@ -502,15 +511,23 @@ class Two extends Phaser.Scene {
                 fish.lives--;
                 fish.hurt = 200;
                 fish.lifeNumChanged = true;
+                if (fish.type == 'hshark') {
+                    shark.destroy();
+                }
             }
             else {
                 fish.lives--;
                 fish.lifeNumChanged = true;
                 this.updateHearts(true);
-                shark.anims.play('blueSharkEat');
-                this.time.delayedCall(300, () => {
-                    shark.anims.play('blueSharkSwim');
-                }, null, this);
+                if (fish.type == 'fish') {
+                    shark.anims.play('blueSharkEat');
+                    this.time.delayedCall(300, () => {
+                        shark.anims.play('blueSharkSwim');
+                    }, null, this);
+                }
+                else if (fish.type == 'hshark') {
+                    shark.destroy();
+                }
             }
         }
     }
