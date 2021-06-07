@@ -156,8 +156,23 @@ class Two extends Phaser.Scene {
             false, 'r', 520, 920, 720,
             true, 'r', 1120, 1320, 720,
             false, 'i', 1520, 720, 0,
+
+            // middle.
+            false, 'c', 3320, 1320, 1520,
             false, 'c', 520, 720, 1320,
             false, 'i', 320, 1320, 0,
+            false, 'r', 720, 3520, 1920,
+
+            // bottom left.
+            false, 'r', 320, 1320, 2720,
+            false, 'c', 1320, 2520, 2720,
+            false, 'c', 1920, 1920, 2720,
+            true, 'r', 1520, 1720, 2720,
+            false, 'r', 2120, 3320, 2720,
+            false, 'c', 2320, 2120, 2320,
+            false, 'c', 2720, 2320, 2520,
+            false, 'i', 3130, 2120, 0,
+            true, 'r', 2920, 3130, 2320,
         ];
 
         // Much easier format.
@@ -168,18 +183,23 @@ class Two extends Phaser.Scene {
             1320, 1720,
             2120, 520,
             3120, 720,
-            520, 3120,
-            1320, 3120,
+            520, 2520,
+            1120, 2520,
+            3320, 2520,
         ];
 
         // Blue Shark Guards.
         // x1, x2, y <- Shark moves horizontally from x1 to x2.
         let BSharkArr = [
-            540, 1120, 2720,
-            540, 2120, 3020,
-            2020, 2920, 3320,
             2120, 3320, 340,
             440, 1320, 540,
+
+            1120, 1920, 1120,
+            1120, 2960, 1420,
+            2520, 2960, 1220,
+            540, 1020, 1520,
+            340, 1640, 3120,
+            2040, 3340, 3420,
         ];
 
 
@@ -197,7 +217,7 @@ class Two extends Phaser.Scene {
         
 
         
-        let finish = this.physics.add.sprite(3500, 3500, 'gemT');
+        let finish = this.physics.add.sprite(2100, 2100, 'gemT');
         this.finGemGroup.add(finish);
         finish.setScale(0.65);
         finish.body.immovable = true;
@@ -208,6 +228,24 @@ class Two extends Phaser.Scene {
         health.setScale(0.65);
         health.body.immovable = true;
         health.body.allowGravity = false;
+
+        let health2 = this.physics.add.sprite(3520, 1520, 'gemH');
+        this.helGemGroup.add(health2);
+        health2.setScale(0.65);
+        health2.body.immovable = true;
+        health2.body.allowGravity = false;
+
+        let health3 = this.physics.add.sprite(3520, 1320, 'gemH');
+        this.helGemGroup.add(health3);
+        health3.setScale(0.65);
+        health3.body.immovable = true;
+        health3.body.allowGravity = false;
+
+        let health4 = this.physics.add.sprite(320, 3520, 'gemH');
+        this.helGemGroup.add(health4);
+        health4.setScale(0.65);
+        health4.body.immovable = true;
+        health4.body.allowGravity = false;
 
         // Blue sharks.
         
@@ -253,8 +291,8 @@ class Two extends Phaser.Scene {
         // Create camera.
         this.cameras.main.setBounds(0, 0, 4000, 4000);
 
-        // this.cameras.main.setZoom(1); // Real
-        this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
+        this.cameras.main.setZoom(1); // Real
+        // this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
         // have camera follow copter
         // startFollow(target [, roundPixels] [, lerpX] [, lerpY] [, offsetX] [, offsetY])
         this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
@@ -392,9 +430,9 @@ class Two extends Phaser.Scene {
 
     spawnClams(group, arr) {
         for (let i = 0; i < arr.length; i += 2) {
-            let clam = new Enemy(this, arr[i], arr[i+1]+60, "clam");
+            let clam = new Enemy(this, arr[i], arr[i+1]+45, "clam");
             group.add(clam);
-            clam.setScale(0.7);
+            clam.setScale(1.2);
             clam.body.immovable = true;
             clam.body.allowGravity = false;
 
