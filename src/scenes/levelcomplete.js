@@ -21,7 +21,6 @@ class LevelComplete extends Phaser.Scene {
         }
 
         let levelName = "";
-        console.log(currLevel);
 
         // currLevel = 3; //debug
 

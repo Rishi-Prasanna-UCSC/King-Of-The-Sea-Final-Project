@@ -21,7 +21,6 @@ class StoryThree extends Phaser.Scene {
             this.cameras.main.fadeOut(1000, 0, 0, 0)
             this.time.delayedCall(1000, () => {
                 this.scene.start("levelOne");
-                console.log("test");
             }, null, this);
 
         });
