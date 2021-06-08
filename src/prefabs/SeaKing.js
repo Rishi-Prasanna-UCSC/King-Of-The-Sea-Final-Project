@@ -32,9 +32,5 @@ class SeaKing extends Phaser.GameObjects.Sprite {
         else if (this.idlePeriod % 30 == 0) {
             this.y = this.originalY - 10;
         }
-
-        if (this.lives <= 0) {
-            this.destroy();
-        }
     }
 }

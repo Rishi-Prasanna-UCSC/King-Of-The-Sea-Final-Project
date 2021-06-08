@@ -323,13 +323,23 @@ class Three extends Phaser.Scene {
         for (let i = 0; i < this.coconutGroup.children.entries.length; i++) {
             this.coconutGroup.children.entries[i].update();
         }
-        if (this.kingGroup.children.entries[0].idlePeriod % 210 == 0) {
-            if (!this.kingGroup.children.entries[0].throw) {
-                this.throwCoconut(this.kingGroup.children.entries[0]);
+        if (this.kingGroup.children.entries[0] != null) {
+            if (this.kingGroup.children.entries[0].idlePeriod % 210 == 0) {
+                if (!this.kingGroup.children.entries[0].throw) {
+                    this.throwCoconut(this.kingGroup.children.entries[0]);
+                }
+            }
+            else {
+                this.kingGroup.children.entries[0].anims.play('kingSit');
             }
         }
-        else {
-            this.kingGroup.children.entries[0].anims.play('kingSit');
+        else if (this.kingGroup.children.entries[0] == null){
+            if (this.p1Fish.lives > 0) {
+                this.time.delayedCall(2000, () => {
+                    this.scene.resume();
+                    this.scene.start("levelComplete");
+                }, null, this);
+            }
         }
 
         this.saveX = this.p1Fish.x;
@@ -679,37 +689,41 @@ class Three extends Phaser.Scene {
         }
     }
     touchedKing(fish, king) {
-        if (fish.type == 'fish') {
-            this.currLives--;
-            fish.lives--;
-            fish.lifeNumChanged = true;
-            fish.hurt = 200;
-        }
-        else if (fish.type == 'hshark') {
-            if (king.hurt <= 0) {
-                king.lives--;
-                king.hurt = 200;
+        if (king != null) {
+            if (fish.type == 'fish') {
+                this.currLives--;
+                fish.lives--;
+                fish.lifeNumChanged = true;
+                fish.hurt = 200;
             }
-            this.currLives--;
-            fish.lives--;
-            fish.lifeNumChanged = true;
-            fish.hurt = 200;
-        }
-        else {
-            if (king.hurt <= 0) {
+            else if (fish.type == 'hshark') {
                 king.lives--;
-                king.hurt = 200;
+                if (king.lives > 1) {
+                    if (king.hurt <= 0) {
+                        king.hurt = 200;
+                    }
+                }
+                else {
+                    king.destroy();
+                }
+                this.currLives--;
+                fish.lives--;
+                fish.lifeNumChanged = true;
+                fish.hurt = 200;
             }
-            fish.anims.play('gwSharkEat');
-            this.time.delayedCall(300, () => {
-                fish.anims.play('gwSharkSwim');
-            }, null, this);
-        }
-        if (king.lives <= 0) {
-            if (fish.lives > 0) {
-                this.time.delayedCall(2000, () => {
-                    this.scene.resume();
-                    this.scene.start("levelComplete");
+            else {
+                king.lives--;
+                if (king.lives > 1) {
+                    if (king.hurt <= 0) {
+                        king.hurt = 200;
+                    }
+                }
+                else {
+                    king.destroy();
+                }
+                fish.anims.play('gwSharkEat');
+                this.time.delayedCall(300, () => {
+                    fish.anims.play('gwSharkSwim');
                 }, null, this);
             }
         }
