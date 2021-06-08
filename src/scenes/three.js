@@ -175,7 +175,7 @@ class Three extends Phaser.Scene {
                 start: 1, end: 1
             }),
             frameRate: 2.5,
-            repeat: 0
+            repeat: -1
         });
 
 
@@ -310,8 +310,8 @@ class Three extends Phaser.Scene {
         // Create camera.
         this.cameras.main.setBounds(0, 0, 4000, 4000);
 
-        // this.cameras.main.setZoom(1); // Real
-        this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
+        this.cameras.main.setZoom(1); // Real
+        // this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
         // have camera follow copter
         // startFollow(target [, roundPixels] [, lerpX] [, lerpY] [, offsetX] [, offsetY])
         this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
@@ -324,11 +324,16 @@ class Three extends Phaser.Scene {
         for (let i = 0; i < this.kingGroup.children.entries.length; i++) {
             this.kingGroup.children.entries[i].update();
         }
-        if (this.kingGroup.children.entries[0].throw) {
-            this.kingGroup.children.entries[0].anims.play('kingThrowCoconut');
-            this.time.delayedCall(500, () => {
-                this.kingGroup.children.entries[0].anims.play('kingSit');
-            }, null, this);
+        for (let i = 0; i < this.coconutGroup.children.entries.length; i++) {
+            this.coconutGroup.children.entries[i].update();
+        }
+        if (this.kingGroup.children.entries[0].idlePeriod % 210 == 0) {
+            if (!this.kingGroup.children.entries[0].throw) {
+                this.spawnCoconut(this.kingGroup.children.entries[0]);
+            }
+        }
+        else {
+            this.kingGroup.children.entries[0].anims.play('kingSit');
         }
 
         this.saveX = this.p1Fish.x;
@@ -414,6 +419,23 @@ class Three extends Phaser.Scene {
                 this.scene.start("gameOver");
             }, null, this);
         }
+    }
+
+    spawnCoconut(king) {
+        king.anims.play('kingThrowCoconut');
+        king.throw = true;
+        this.time.delayedCall(600, () => {
+            let coconut = new Coconut(this,
+                king.x - 400,
+                king.y - 100,
+                "Coconut");
+            this.coconutGroup.add(coconut);
+            coconut.setScale(0.25);
+            coconut.body.immovable = true;
+            coconut.body.allowGravity = false;
+            king.throw = false;
+            king.anims.play('kingSit');
+        }, null, this);
     }
 
     spawnWalls(group, bGroup, arr) {

@@ -5,6 +5,9 @@ class Coconut extends Phaser.GameObjects.Sprite {
     }
 
     update(){
-        
+        this.x -= 5;
+        if (this.x < -100) {
+            this.destroy();
+        }
     }
 }
