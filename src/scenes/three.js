@@ -488,7 +488,7 @@ class Three extends Phaser.Scene {
             bshark.startX = arr[i];
             bshark.endX = arr[i+1];
 
-            bshark.setScale(0.7);
+            bshark.setScale(0.6);
             bshark.body.immovable = true;
             bshark.body.allowGravity = false;
             bshark.anims.play('blueSharkSwim');
@@ -586,13 +586,27 @@ class Three extends Phaser.Scene {
                 }
             }
         }
-        else {
+        else if (fish.type == 'hshark') {
             clam.destroy();
+        }
+        else if (fish.type == 'gwshark') {
+            clam.destroy();
+            fish.anims.play('gwSharkEat');
+            this.time.delayedCall(300, () => {
+                fish.anims.play('gwSharkSwim');
+            }, null, this);
         }
     }
 
     touchedBShark(fish, shark) {
-        if (fish.hurt == 0) {
+        if (fish.type == 'gwshark') {
+            shark.destroy();
+            fish.anims.play('gwSharkEat');
+            this.time.delayedCall(300, () => {
+                fish.anims.play('gwSharkSwim');
+            }, null, this);
+        }
+        else if (fish.hurt == 0) {
             if (fish.lives > 1) {
                 this.currLives--;
                 fish.lives--;

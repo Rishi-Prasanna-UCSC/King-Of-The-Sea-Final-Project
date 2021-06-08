@@ -27,31 +27,31 @@ class GreatWhiteShark extends Player {
             }
             if (Phaser.Input.Keyboard.JustDown(LEFT)) {
                 this.flipX = false;
-                this.setBodySize(275, 100);
+                this.setBodySize(738, 310);
                 this.angle = 0;
                 this.setVelocityY(0);
-                this.setVelocityX(-swimSpeed);
+                this.setVelocityX(-swimSpeed * 1.25);
             }
             else if (Phaser.Input.Keyboard.JustDown(RIGHT)) {
                 this.flipX = true;
-                this.setBodySize(275, 100);
+                this.setBodySize(738, 310);
                 this.angle = 0;
                 this.setVelocityY(0);
-                this.setVelocityX(swimSpeed);
+                this.setVelocityX(swimSpeed * 1.25);
             }
             else if (Phaser.Input.Keyboard.JustDown(UP)) {
                 this.flipX = true;
-                this.setBodySize(100, 275);
+                this.setBodySize(310, 738);
                 this.angle = 270;
                 this.setVelocityX(0);
-                this.setVelocityY(-swimSpeed);
+                this.setVelocityY(-swimSpeed * 1.25);
             }
             else if (Phaser.Input.Keyboard.JustDown(DOWN)) {
                 this.flipX = false;
-                this.setBodySize(100, 275);
+                this.setBodySize(310, 738);
                 this.angle = 270;
                 this.setVelocityX(0);
-                this.setVelocityY(swimSpeed);
+                this.setVelocityY(swimSpeed * 1.25);
             }
         }
     }
