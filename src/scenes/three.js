@@ -72,7 +72,7 @@ class Three extends Phaser.Scene {
         this.helGemGroup = this.physics.add.group();
 
         //creating player
-        this.p1Fish = new GreatWhiteShark(this, 3320, 520, "gwShark");
+        this.p1Fish = new GreatWhiteShark(this, 540, 520, "gwShark");
 
 
         this.saveX;
@@ -203,20 +203,38 @@ class Three extends Phaser.Scene {
             false, 'r', 320, 3720, 3720,
             false, 'c', 3720, 320, 3520,
 
+            false, 'r', 320, 3120, 920,
+            true, 'r', 3320, 3520, 920,
+
+            true, 'r', 320, 520, 1920,
+            false, 'r', 720, 3520, 1920,
+            true, 'c', 3120, 1120, 1720,
+            false, 'c', 2520, 1320, 1720,
+            false, 'c', 920, 1320, 1720,
+
+            false, 'r', 920, 3520, 2920,
+            false, 'r', 320, 3320, 2420,
+
+            true, 'c', 1320, 320, 720,
         ];
 
         // Much easier format.
         // x, y
         let clamArr = [
             720, 520,
-            920, 1720,
+            1720, 1720,
+            1320, 1720,
+            1920, 1720,
         ];
 
         // Blue Shark Guards.
         // x1, x2, y <- Shark moves horizontally from x1 to x2.
         let BSharkArr = [
             2120, 3320, 340,
-            440, 1320, 540,
+            1820, 3320, 540,
+            1120, 2120, 1120,
+            1120, 2120, 1120,
+            420, 600, 2920,
         ];
 
 
@@ -236,18 +254,6 @@ class Three extends Phaser.Scene {
         health.setScale(0.65);
         health.body.immovable = true;
         health.body.allowGravity = false;
-
-        let health2 = this.physics.add.sprite(3520, 1520, 'gemH');
-        this.helGemGroup.add(health2);
-        health2.setScale(0.65);
-        health2.body.immovable = true;
-        health2.body.allowGravity = false;
-
-        let health3 = this.physics.add.sprite(3520, 1320, 'gemH');
-        this.helGemGroup.add(health3);
-        health3.setScale(0.65);
-        health3.body.immovable = true;
-        health3.body.allowGravity = false;
 
         let health4 = this.physics.add.sprite(320, 3520, 'gemH');
         this.helGemGroup.add(health4);
@@ -300,8 +306,8 @@ class Three extends Phaser.Scene {
         // Create camera.
         this.cameras.main.setBounds(0, 0, 4000, 4000);
 
-        // this.cameras.main.setZoom(1); // Real
-        this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
+        this.cameras.main.setZoom(1); // Real
+        // this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
         // have camera follow copter
         // startFollow(target [, roundPixels] [, lerpX] [, lerpY] [, offsetX] [, offsetY])
         this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
@@ -319,7 +325,7 @@ class Three extends Phaser.Scene {
         }
         if (this.kingGroup.children.entries[0].idlePeriod % 210 == 0) {
             if (!this.kingGroup.children.entries[0].throw) {
-                this.spawnCoconut(this.kingGroup.children.entries[0]);
+                this.throwCoconut(this.kingGroup.children.entries[0]);
             }
         }
         else {
@@ -411,13 +417,17 @@ class Three extends Phaser.Scene {
         }
     }
 
-    spawnCoconut(king) {
+    throwCoconut(king) {
         king.anims.play('kingThrowCoconut');
         king.throw = true;
         this.time.delayedCall(600, () => {
             let coconut = new Coconut(this,
                 king.x - 400,
-                king.y - 100,
+                //Math.floor(Math.random() * (max - min) + min);
+
+                (Math.floor(Math.random() *
+                ((king.y - 200) - 
+                (king.y + 200)) + (king.y + 200))),
                 "Coconut");
             this.coconutGroup.add(coconut);
             coconut.setScale(0.25);
