@@ -50,6 +50,9 @@ class GameOver extends Phaser.Scene {
             else if (numLevelFailed == 2) {
                 this.scene.start("levelTwo");
             }
+            else if (numLevelFailed == 3) {
+                this.scene.start("levelThree");
+            }
         });
 
         this.menu.on('pointerdown', () => {
