@@ -1,25 +1,24 @@
 class Three extends Phaser.Scene {
-    constructor() {
-        super("levelThree");
+    constructor(){
+        super("levelTwo");
     }
 
-    preload() {
+    preload(){
         this.load.image('Pause', 'assets/art/PauseButton.png');
         this.load.image('BG', 'assets/art/PlayBackground.png');
 
         this.load.image('rock', 'assets/sprites/rock.png');
+        this.load.image('break', 'assets/sprites/breakableRock.png');
 
         this.load.spritesheet('fish', 'assets/character/fishSpritesheet.png',
-            { frameWidth: 275, frameHeight: 100 });
-        this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png',
-            { frameWidth: 100, frameHeight: 100 });
+            {frameWidth: 275, frameHeight: 100});
+        this.load.spritesheet('clam', 'assets/sprites/clamAnimation.png', 
+            {frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('blueShark', 'assets/character/blueSharkSpritesheet.png',
-            { frameWidth: 736, frameHeight: 258 });
+            {frameWidth: 736, frameHeight: 258});
         this.load.spritesheet('hammerheadSharkH', 'assets/character/HammerheadSpritesheetH.png',
-            { frameWidth: 630, frameHeight: 322 });
-        this.load.spritesheet('hammerheadSharkV', 'assets/character/HammerheadSpritesheetV.png',
-            { frameWidth: 324, frameHeight: 532 });
-
+            {frameWidth: 630, frameHeight: 322});
+        
         // Transformation gem...probably to be used as the finish line.
         this.load.image('gemT', 'assets/sprites/TransformGem.png');
 
@@ -31,11 +30,9 @@ class Three extends Phaser.Scene {
         this.load.image('lostH', 'assets/sprites/NotHeartIcon.png');
     }
 
-    create() {
+    create(){
 
-        currLevel = 3;
-
-        // this.scene.start("levelComplete"); //debug
+        currLevel = 2;
 
         this.add.image(0, 0, 'BG').setOrigin(0);
 
@@ -48,11 +45,12 @@ class Three extends Phaser.Scene {
         TWO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
         THREE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
 
-
+        
 
         //create groups
         // Walls
         this.rockGroup = this.physics.add.group();
+        this.bRockGroup = this.physics.add.group();
 
         // Enemies
         this.clamsGroup = this.physics.add.group();
@@ -63,11 +61,12 @@ class Three extends Phaser.Scene {
         this.helGemGroup = this.physics.add.group();
 
         //creating player
-        this.p1Fish = new HammerheadShark(this, 320, 320, "hammerheadSharkH");
+        this.p1Fish = new HammerheadShark(this, 3320, 520, "hammerheadSharkH");
         this.currLives = 3;
 
         this.saveX;
         this.saveY;
+        this.saveHurt;
 
         // Swimming Fish Animation.
         this.anims.create({
@@ -130,15 +129,6 @@ class Three extends Phaser.Scene {
             frameRate: 2.5,
             repeat: -1
         });
-        // Hammerhead shark swimming horizontally.
-        this.anims.create({
-            key: 'hammerheadSharkSwimV',
-            frames: this.anims.generateFrameNumbers('hammerheadSharkV', {
-                start: 0, end: 1
-            }),
-            frameRate: 2.5,
-            repeat: -1
-        });
 
 
 
@@ -150,72 +140,71 @@ class Three extends Phaser.Scene {
         // 'c', x, lowY, highY    -> create column.
         // 'i', x, y, 0           -> create individual cell.
         let wallArr = [
-            'r', 120, 3720, 120,
-            'c', 120, 320, 3720,
-            'r', 320, 3720, 3720,
-            'c', 3720, 320, 3520,
+            // boundaries.
+            false, 'r', 120, 3720, 120,
+            false, 'c', 120, 320, 3720,
+            false, 'r', 320, 3720, 3720,
+            false, 'c', 3720, 320, 3520,
 
-            // top left section.
-            'r', 520, 1220, 520,
-            'r', 320, 1220, 920,
-            'i', 1520, 320, 0,
-            'c', 1520, 720, 1720,
+            // top right.
+            false, 'r', 2520, 3520, 920,
+            false, 'c', 2520, 520, 720,
+            false, 'r', 1720, 2320, 720,
+            true, 'c', 1720, 320, 520,
 
-            // middle left section.
-            'r', 520, 1220, 1320,
-            'r', 520, 1420, 1920,
-            'c', 720, 1720, 2520,
+            // top left.
+            false, 'r', 520, 920, 720,
+            true, 'r', 1120, 1320, 720,
+            false, 'i', 1520, 720, 0,
 
-            // bottom left section.
-            'r', 320, 1520, 3320,
-            'c', 1520, 2120, 2720,
+            // middle.
+            false, 'c', 3320, 1320, 1520,
+            false, 'c', 520, 720, 1320,
+            false, 'i', 320, 1320, 0,
+            false, 'r', 720, 3520, 1920,
 
-            // middle section.
-            'r', 1720, 1920, 2520,
-            'r', 2320, 2520, 2520,
-            'i', 3120, 2520, 0,
-            'c', 2520, 2720, 3120,
-            'c', 3320, 2520, 3520,
-            'c', 2320, 2120, 2320,
-            'c', 2120, 720, 1920,
-            'c', 2320, 720, 1920,
-            'i', 1920, 920, 0,
-            'i', 1720, 1320, 0,
-            'i', 1920, 1720, 0,
-
-            // top right section.
-            'r', 2520, 3320, 720,
-            'r', 2720, 3320, 1120,
-            'r', 2520, 3320, 1520,
-            'r', 2720, 3520, 1920,
+            // bottom left.
+            false, 'r', 320, 1320, 2720,
+            false, 'c', 1320, 2520, 2720,
+            false, 'c', 1920, 1920, 2720,
+            true, 'r', 1520, 1720, 2720,
+            false, 'r', 2120, 3320, 2720,
+            false, 'c', 2320, 2120, 2320,
+            false, 'c', 2720, 2320, 2520,
+            false, 'i', 3130, 2120, 0,
+            true, 'r', 2920, 3130, 2320,
         ];
 
         // Much easier format.
         // x, y
         let clamArr = [
-            /*
-            520, 320,
+            720, 520,
             920, 1720,
             1320, 1720,
             2120, 520,
-            3120, 520,
-            520, 3120,
-            1320, 3120,
-            */
+            3120, 720,
+            520, 2520,
+            1120, 2520,
+            3320, 2520,
         ];
 
         // Blue Shark Guards.
         // x1, x2, y <- Shark moves horizontally from x1 to x2.
         let BSharkArr = [
-            540, 1120, 2720,
-            540, 2120, 3020,
-            2020, 2920, 3320,
-            1920, 3320, 340,
+            2120, 3320, 340,
+            440, 1320, 540,
+
+            1120, 1920, 1120,
+            1120, 2960, 1420,
+            2520, 2960, 1220,
+            540, 1020, 1520,
+            340, 1640, 3120,
+            2040, 3340, 3420,
         ];
 
 
-
-        this.spawnWalls(this.rockGroup, wallArr);
+        
+        this.spawnWalls(this.rockGroup, this.bRockGroup, wallArr);
         this.spawnClams(this.clamsGroup, clamArr);
         this.spawnBSharks(this.BSharksGroup, BSharkArr);
 
@@ -223,24 +212,43 @@ class Three extends Phaser.Scene {
 
 
         this.physics.add.collider(this.p1Fish, this.rockGroup);
+        this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
 
+        
 
-
-
-        let finish = this.physics.add.sprite(3500, 3500, 'gemT');
+        
+        let finish = this.physics.add.sprite(2100, 2100, 'gemT');
         this.finGemGroup.add(finish);
         finish.setScale(0.65);
         finish.body.immovable = true;
         finish.body.allowGravity = false;
-
-        let health = this.physics.add.sprite(320, 3520, 'gemH');
+        
+        let health = this.physics.add.sprite(320, 1120, 'gemH');
         this.helGemGroup.add(health);
         health.setScale(0.65);
         health.body.immovable = true;
         health.body.allowGravity = false;
 
-        // Blue sharks.
+        let health2 = this.physics.add.sprite(3520, 1520, 'gemH');
+        this.helGemGroup.add(health2);
+        health2.setScale(0.65);
+        health2.body.immovable = true;
+        health2.body.allowGravity = false;
 
+        let health3 = this.physics.add.sprite(3520, 1320, 'gemH');
+        this.helGemGroup.add(health3);
+        health3.setScale(0.65);
+        health3.body.immovable = true;
+        health3.body.allowGravity = false;
+
+        let health4 = this.physics.add.sprite(320, 3520, 'gemH');
+        this.helGemGroup.add(health4);
+        health4.setScale(0.65);
+        health4.body.immovable = true;
+        health4.body.allowGravity = false;
+
+        // Blue sharks.
+        
 
         // Lives.
         this.heart1 = this.add.sprite(50, 50, 'lifeH');
@@ -259,7 +267,7 @@ class Three extends Phaser.Scene {
         this.p1Fish.anims.play('HammerSwimming');
 
 
-
+        
 
 
         //creates pause button
@@ -271,8 +279,12 @@ class Three extends Phaser.Scene {
             this.scene.launch('pauseScene');
         });
         this.pause.setScrollFactor(0);
-
-        this.addCollisions();
+        
+        this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+        this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+        this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
+        this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        
 
 
 
@@ -288,53 +300,128 @@ class Three extends Phaser.Scene {
         this.cameras.main.setDeadzone(100, 50);
         this.cameras.main.setName("center");
     }
+    update(){
+        this.p1Fish.update();
+        this.saveX = this.p1Fish.x;
+        this.saveY = this.p1Fish.y;
+        this.saveHurt = this.p1Fish.hurt;
+        if (Phaser.Input.Keyboard.JustDown(ONE)) {
+            this.p1Fish.destroy();
+            this.p1Fish = new Fish(this, this.saveX, this.saveY, "fish");
+            this.p1Fish.hurt = this.saveHurt;
+            this.p1Fish.setScale(0.5);
+            this.p1Fish.anims.play('FishSwimming');
+            this.p1Fish.lives = this.currLives;
+            
+            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
+            // set camera dead zone
+            this.cameras.main.setDeadzone(100, 50);
+            this.cameras.main.setName("center");
 
-    spawnWalls(group, arr) {
-        for (let i = 0; i < arr.length; i += 4) {
-            if (arr[i] == 'r') {
+            this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
+            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
+            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        }
+        else if (Phaser.Input.Keyboard.JustDown(TWO)) {
+            this.p1Fish.destroy();
+            this.p1Fish = new HammerheadShark(this, this.saveX, this.saveY, "hammerheadSharkH");
+            this.p1Fish.hurt = this.saveHurt;
+            this.p1Fish.setScale(0.5);
+            this.p1Fish.anims.play('HammerSwimming');
+            this.p1Fish.lives = this.currLives;
+            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
+            // set camera dead zone
+            this.cameras.main.setDeadzone(100, 50);
+            this.cameras.main.setName("center");
+
+            this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
+            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
+            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        }
+
+        for (let i = 0; i < this.BSharksGroup.children.entries.length; i++) {
+            this.BSharksGroup.children.entries[i].update();
+        }
+        if (!this.p1Fish.dead) {
+            if (this.p1Fish.lifeNumChanged) {
+                
+                this.updateHearts(true);
+
+                this.p1Fish.lifeNumChanged = false;
+            }
+        }
+        else {
+            numLevelFailed = 2;
+            this.p1Fish.destroy();
+            this.time.delayedCall(2800, () => {
+                this.scene.start("gameOver");
+            }, null, this);
+        }
+    }
+
+    spawnWalls(group, bGroup, arr) {
+        for (let i = 0; i < arr.length; i += 5) {
+            if (arr[i+1] == 'r') {
                 let row = [];
-                row.push(arr[i + 1], arr[i + 2], arr[i + 3]);
-                this.spawnRow(group, row);
+                row.push(arr[i+2], arr[i+3], arr[i+4]);
+                if (arr[i]) {this.spawnRow(bGroup, row, true);}
+                else {this.spawnRow(group, row, false);}
             }
-            else if (arr[i] == 'c') {
+            else if (arr[i+1] == 'c') {
                 let col = [];
-                col.push(arr[i + 1], arr[i + 2], arr[i + 3]);
-                this.spawnCol(group, col);
+                col.push(arr[i+2], arr[i+3], arr[i+4]);
+                if (arr[i]) {this.spawnCol(bGroup, col, true);}
+                else {this.spawnCol(group, col, false);}
             }
-            else if (arr[i] == 'i') {
-                this.spawnInd(group, arr[i + 1], arr[i + 2]);
+            else if (arr[i+1] == 'i') {
+                if (arr[i]) {this.spawnInd(bGroup, arr[i+2], arr[i+3], true);}
+                else {this.spawnInd(group, arr[i+2], arr[i+3], false);}
             }
         }
     }
 
-    spawnRow(group, arr) {
+    spawnRow(group, arr, breakable) {
         // arr[0] = low X.
         // arr[1] = high X.
         // arr[2] = y.
 
         for (let i = arr[0]; i <= arr[1]; i += 200) {
-            let rock1 = this.physics.add.sprite(i, arr[2], "rock");
+            let rock1;
+            if (breakable) {rock1 = this.physics.add.sprite(i, arr[2], "break");}
+            else {rock1 = this.physics.add.sprite(i, arr[2], "rock");}
             group.add(rock1);
             rock1.setScale(2);
             rock1.body.immovable = true;
             rock1.body.allowGravity = false;
         }
     }
-    spawnCol(group, arr) {
+    spawnCol(group, arr, breakable) {
         // arr[0] = x.
         // arr[1] = low Y.
         // arr[2] = high Y.
 
         for (let i = arr[1]; i <= arr[2]; i += 200) {
-            let rock1 = this.physics.add.sprite(arr[0], i, "rock");
+            let rock1;
+            if (breakable) {rock1 = this.physics.add.sprite(arr[0], i, "break");}
+            else {rock1 = this.physics.add.sprite(arr[0], i, "rock");}
+            
             group.add(rock1);
             rock1.setScale(2);
             rock1.body.immovable = true;
             rock1.body.allowGravity = false;
         }
     }
-    spawnInd(group, x, y) {
-        let rock1 = this.physics.add.sprite(x, y, "rock");
+    spawnInd(group, x, y, breakable) {
+        let rock1;
+        if (breakable) {rock1 = this.physics.add.sprite(x, y, "break");}
+        else {rock1 = this.physics.add.sprite(x, y, "rock");}
+        
         group.add(rock1);
         rock1.setScale(2);
         rock1.body.immovable = true;
@@ -343,9 +430,9 @@ class Three extends Phaser.Scene {
 
     spawnClams(group, arr) {
         for (let i = 0; i < arr.length; i += 2) {
-            let clam = new Enemy(this, arr[i], arr[i + 1] + 60, "clam");
+            let clam = new Enemy(this, arr[i], arr[i+1]+45, "clam");
             group.add(clam);
-            clam.setScale(0.7);
+            clam.setScale(1.2);
             clam.body.immovable = true;
             clam.body.allowGravity = false;
 
@@ -355,11 +442,11 @@ class Three extends Phaser.Scene {
 
     spawnBSharks(group, arr) {
         for (let i = 0; i < arr.length; i += 3) {
-            let bshark = new BlueShark(this, arr[i], arr[i + 2], "blueShark");
+            let bshark = new BlueShark(this, arr[i], arr[i+2], "blueShark");
             group.add(bshark);
 
             bshark.startX = arr[i];
-            bshark.endX = arr[i + 1];
+            bshark.endX = arr[i+1];
 
             bshark.setScale(0.7);
             bshark.body.immovable = true;
@@ -368,78 +455,15 @@ class Three extends Phaser.Scene {
         }
     }
 
-    update() {
-        this.p1Fish.update();
-        this.saveX = this.p1Fish.x;
-        this.saveY = this.p1Fish.y;
-        if (Phaser.Input.Keyboard.JustDown(ONE)) {
-            this.p1Fish.destroy();
-            this.p1Fish = new Fish(this, this.saveX, this.saveY, "fish");
-            this.p1Fish.setScale(0.5);
-            this.p1Fish.anims.play('FishSwimming');
-            this.p1Fish.lives = this.currLives;
-            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
-            // set camera dead zone
-            this.cameras.main.setDeadzone(100, 50);
-            this.cameras.main.setName("center");
-
-            this.addCollisions();
-        }
-        else if (Phaser.Input.Keyboard.JustDown(TWO)) {
-            this.p1Fish.destroy();
-            this.p1Fish = new HammerheadShark(this, this.saveX, this.saveY, "hammerheadSharkH");
-            this.p1Fish.setScale(0.5);
-            this.p1Fish.anims.play('HammerSwimming');
-            this.p1Fish.lives = this.currLives;
-            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
-            // set camera dead zone
-            this.cameras.main.setDeadzone(100, 50);
-            this.cameras.main.setName("center");
-
-            this.addCollisions();
+    breakWall(fish, bWall) {
+        if (fish.type == 'hshark') {
+            bWall.destroy();
         }
         else {
-            //set up for when greatwhite has assets
-
-            // this.p1Fish.destroy();
-            // this.p1Fish = new GreatWhiteShark(this, this.saveX, this.saveY, "");
-            // this.p1Fish.setScale(0.5);
-            // this.p1Fish.anims.play("");
-            // this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
-            // this.cameras.main.setDeadzone(100, 50);
-            // this.cameras.main.setName("center");
-
-            // this.addCollisions();
-        }
-
-        for (let i = 0; i < this.BSharksGroup.children.entries.length; i++) {
-            this.BSharksGroup.children.entries[i].update();
-        }
-        if (!this.p1Fish.dead) {
-            if (this.p1Fish.lifeNumChanged) {
-
-                this.updateHearts(true);
-
-                this.p1Fish.lifeNumChanged = false;
-            }
-        }
-        else {
-            numLevelFailed = 1;
-            this.p1Fish.destroy();
-            this.time.delayedCall(2800, () => {
-                this.scene.start("gameOver");
-            }, null, this);
+            // Do nothing.
         }
     }
-
-    addCollisions(){
-        this.physics.add.collider(this.p1Fish, this.rockGroup);
-            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
-            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
-            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
-            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
-    }
-
+    
     updateHearts(triggerDead) {
         if (this.p1Fish.lives == 3) {
             this.heart3.destroy();
@@ -510,15 +534,20 @@ class Three extends Phaser.Scene {
         gem.destroy();
     }
 
-    touchedClam(fish, clam) {
-        if (fish.hurt == 0) {
-            if (fish.lives > 0) {
-                this.currLives--;
-                fish.lives--;
-                fish.lifeNumChanged = true;
-                fish.hurt = 200;
-                clam.anims.play('clamOpenAnim');
+    touchedClam(fish, clam){
+        if (fish.type == 'fish') {
+            if (fish.hurt == 0) {
+                if (fish.lives > 0) {
+                    this.currLives--;
+                    fish.lives--;
+                    fish.lifeNumChanged = true;
+                    fish.hurt = 200;
+                    clam.anims.play('clamOpenAnim');
+                }
             }
+        }
+        else {
+            clam.destroy();
         }
     }
 
@@ -529,20 +558,28 @@ class Three extends Phaser.Scene {
                 fish.lives--;
                 fish.hurt = 200;
                 fish.lifeNumChanged = true;
+                if (fish.type == 'hshark') {
+                    shark.destroy();
+                }
             }
             else {
                 fish.lives--;
                 fish.lifeNumChanged = true;
                 this.updateHearts(true);
-                shark.anims.play('blueSharkEat');
-                this.time.delayedCall(300, () => {
-                    shark.anims.play('blueSharkSwim');
-                }, null, this);
+                if (fish.type == 'fish') {
+                    shark.anims.play('blueSharkEat');
+                    this.time.delayedCall(300, () => {
+                        shark.anims.play('blueSharkSwim');
+                    }, null, this);
+                }
+                else if (fish.type == 'hshark') {
+                    shark.destroy();
+                }
             }
         }
     }
 
-    touchedFinish(fish, finish) {
+    touchedFinish(fish, finish){
         finish.destroy();
         // this.p1Fish.stop();
         this.time.delayedCall(600, () => {
@@ -550,7 +587,7 @@ class Three extends Phaser.Scene {
             this.scene.start("levelComplete");
         }, null, this);
         // this.scene.pause();
-
-
+  
+        
     }
 }
