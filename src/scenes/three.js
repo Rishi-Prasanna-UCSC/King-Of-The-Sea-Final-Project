@@ -31,6 +31,11 @@ class Three extends Phaser.Scene {
         // 
         this.load.image('lifeH', 'assets/sprites/HeartIcon.png');
         this.load.image('lostH', 'assets/sprites/NotHeartIcon.png');
+
+        // Sea King and Coconut!
+        this.load.spritesheet('SeaKing', 'assets/character/SeaKingSpritesheet.png',
+            {frameWidth: 500, frameHeight: 486});
+        this.load.image('Coconut', 'assets/art/Coconut.png');
     }
 
     create(){
