@@ -36,10 +36,12 @@ class Three extends Phaser.Scene {
         this.load.spritesheet('SeaKing', 'assets/character/SeaKingSpritesheet.png',
             {frameWidth: 500, frameHeight: 486});
         this.load.image('Coconut', 'assets/art/Coconut.png');
+        this.load.image('Throne', 'assets/art/Throne.png');
     }
 
     create(){
 
+        this.currLives = 3;
         currLevel = 3;
 
         this.add.image(0, 0, 'BG').setOrigin(0);
@@ -63,6 +65,7 @@ class Three extends Phaser.Scene {
         // Enemies
         this.clamsGroup = this.physics.add.group();
         this.BSharksGroup = this.physics.add.group();
+        this.kingGroup = this.physics.add.group();
 
         // Gems
         this.finGemGroup = this.physics.add.group();
@@ -70,7 +73,7 @@ class Three extends Phaser.Scene {
 
         //creating player
         this.p1Fish = new GreatWhiteShark(this, 3320, 520, "gwShark");
-        this.currLives = 3;
+
 
         this.saveX;
         this.saveY;
@@ -155,8 +158,33 @@ class Three extends Phaser.Scene {
             frameRate: 2.5,
             repeat: -1
         });
+        // Sea King's animation.
+        this.anims.create({
+            key: 'kingSit',
+            frames: this.anims.generateFrameNumbers('SeaKing', {
+                start: 0, end: 0
+            }),
+            frameRate: 2.5,
+            repeat: -1
+        });
+        // Sea King's throwing.
+        this.anims.create({
+            key: 'kingThrowCoconut',
+            frames: this.anims.generateFrameNumbers('SeaKing', {
+                start: 1, end: 1
+            }),
+            frameRate: 2.5,
+            repeat: 0
+        });
 
 
+
+        this.add.image(3020, 3120, 'Throne').setOrigin(0);
+        this.king = new SeaKing(this, 3220, 3320, "SeaKing");
+        this.king.anims.play('kingSit');
+        this.king.idle = true;
+        this.kingGroup.add(this.king);
+        
 
 
 
@@ -172,33 +200,6 @@ class Three extends Phaser.Scene {
             false, 'r', 320, 3720, 3720,
             false, 'c', 3720, 320, 3520,
 
-            // top right.
-            false, 'r', 2520, 3520, 920,
-            false, 'c', 2520, 520, 720,
-            false, 'r', 1720, 2320, 720,
-            true, 'c', 1720, 320, 520,
-
-            // top left.
-            false, 'r', 520, 920, 720,
-            true, 'r', 1120, 1320, 720,
-            false, 'i', 1520, 720, 0,
-
-            // middle.
-            false, 'c', 3320, 1320, 1520,
-            false, 'c', 520, 720, 1320,
-            false, 'i', 320, 1320, 0,
-            false, 'r', 720, 3520, 1920,
-
-            // bottom left.
-            false, 'r', 320, 1320, 2720,
-            false, 'c', 1320, 2520, 2720,
-            false, 'c', 1920, 1920, 2720,
-            true, 'r', 1520, 1720, 2720,
-            false, 'r', 2120, 3320, 2720,
-            false, 'c', 2320, 2120, 2320,
-            false, 'c', 2720, 2320, 2520,
-            false, 'i', 3130, 2120, 0,
-            true, 'r', 2920, 3130, 2320,
         ];
 
         // Much easier format.
@@ -206,12 +207,6 @@ class Three extends Phaser.Scene {
         let clamArr = [
             720, 520,
             920, 1720,
-            1320, 1720,
-            2120, 520,
-            3120, 720,
-            520, 2520,
-            1120, 2520,
-            3320, 2520,
         ];
 
         // Blue Shark Guards.
@@ -219,13 +214,6 @@ class Three extends Phaser.Scene {
         let BSharkArr = [
             2120, 3320, 340,
             440, 1320, 540,
-
-            1120, 1920, 1120,
-            1120, 2960, 1420,
-            2520, 2960, 1220,
-            540, 1020, 1520,
-            340, 1640, 3120,
-            2040, 3340, 3420,
         ];
 
 
@@ -308,6 +296,7 @@ class Three extends Phaser.Scene {
         
         this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
         this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+        this.physics.add.collider(this.p1Fish, this.kingGroup, null, this.touchedKing, this);
         this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
         this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
         
@@ -327,6 +316,7 @@ class Three extends Phaser.Scene {
         this.cameras.main.setName("center");
     }
     update(){
+        this.king.update();
         this.p1Fish.update();
         this.saveX = this.p1Fish.x;
         this.saveY = this.p1Fish.y;
@@ -637,6 +627,34 @@ class Three extends Phaser.Scene {
             }
         }
     }
+    touchedKing(fish, king) {
+        if (fish.type == 'fish') {
+            this.currLives--;
+            fish.lives--;
+            fish.lifeNumChanged = true;
+            fish.hurt = 200;
+        }
+        else if (fish.type == 'hshark') {
+            if (king.hurt <= 0) {
+                king.lives--;
+                king.hurt = 200;
+            }
+            this.currLives--;
+            fish.lives--;
+            fish.lifeNumChanged = true;
+            fish.hurt = 200;
+        }
+        else {
+            if (king.hurt <= 0) {
+                king.lives--;
+                king.hurt = 200;
+            }
+            fish.anims.play('gwSharkEat');
+            this.time.delayedCall(300, () => {
+                fish.anims.play('gwSharkSwim');
+            }, null, this);
+        }
+    }
 
     touchedFinish(fish, finish){
         finish.destroy();
@@ -646,7 +664,5 @@ class Three extends Phaser.Scene {
             this.scene.start("levelComplete");
         }, null, this);
         // this.scene.pause();
-  
-        
     }
 }

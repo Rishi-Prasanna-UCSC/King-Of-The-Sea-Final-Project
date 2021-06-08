@@ -4,33 +4,34 @@ class SeaKing extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         
         this.lives = 3;
+        this.idle = true;
+        this.idlePeriod = 0;
+        this.originalY = this.y;
+        this.hurt = 0;
     }
 
     update(){
+        this.idlePeriod++;
+
+        if (this.hurt > 0) {
+            this.hurt--;
+            if ((this.hurt % 4 == 0) || (this.hurt % 4 == 1)) {
+                this.setVisible(true);
+            }
+            else if ((this.hurt % 4 == 2) || (this.hurt % 4 == 3)) {
+                this.setVisible(false);
+            }
+        }
+
+        if (this.idlePeriod % 60 == 0) {
+            this.y = this.originalY;
+        }
+        else if (this.idlePeriod % 30 == 0) {
+            this.y = this.originalY - 10;
+        }
+
         if (this.lives <= 0) {
             this.destroy();
-        }
-        // If you're going right,
-        // If you are beyond the right point,
-        // Then turn around.
-        // Else, keep swimming right.
-        if (this.dir == 1) {
-            if (this.x >= this.endX) {
-                this.dir = 0;
-            }
-            else if (this.x < this.endX) {
-                this.flipX = true;
-                this.x += 5;
-            }
-        }
-        else if (this.dir == 0) {
-            if (this.x <= this.startX) {
-                this.dir = 1;
-            }
-            else if (this.x > this.startX) {
-                this.flipX = false;
-                this.x -= 5;
-            }
         }
     }
 }
