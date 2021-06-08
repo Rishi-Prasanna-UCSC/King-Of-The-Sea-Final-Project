@@ -312,8 +312,8 @@ class Three extends Phaser.Scene {
         // Create camera.
         this.cameras.main.setBounds(0, 0, 4000, 4000);
 
-        this.cameras.main.setZoom(1); // Real
-        // this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
+        // this.cameras.main.setZoom(1); // Real
+        this.cameras.main.setZoom(0.1); // Debug mode, see the entire map.
         // have camera follow copter
         // startFollow(target [, roundPixels] [, lerpX] [, lerpY] [, offsetX] [, offsetY])
         this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
