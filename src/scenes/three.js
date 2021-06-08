@@ -1,6 +1,6 @@
 class Three extends Phaser.Scene {
     constructor(){
-        super("levelTwo");
+        super("levelThree");
     }
 
     preload(){
@@ -19,6 +19,9 @@ class Three extends Phaser.Scene {
         this.load.spritesheet('hammerheadSharkH', 'assets/character/HammerheadSpritesheetH.png',
             {frameWidth: 630, frameHeight: 322});
         
+        this.load.spritesheet('gwShark', 'assets/character/GWShark_spritesheet.png',
+            {frameWidth: 738, frameHeight: 310});
+        
         // Transformation gem...probably to be used as the finish line.
         this.load.image('gemT', 'assets/sprites/TransformGem.png');
 
@@ -32,7 +35,7 @@ class Three extends Phaser.Scene {
 
     create(){
 
-        currLevel = 2;
+        currLevel = 3;
 
         this.add.image(0, 0, 'BG').setOrigin(0);
 
@@ -61,7 +64,7 @@ class Three extends Phaser.Scene {
         this.helGemGroup = this.physics.add.group();
 
         //creating player
-        this.p1Fish = new HammerheadShark(this, 3320, 520, "hammerheadSharkH");
+        this.p1Fish = new GreatWhiteShark(this, 3320, 520, "gwShark");
         this.currLives = 3;
 
         this.saveX;
@@ -125,6 +128,24 @@ class Three extends Phaser.Scene {
             key: 'hammerheadSharkSwimH',
             frames: this.anims.generateFrameNumbers('hammerheadSharkH', {
                 start: 0, end: 1
+            }),
+            frameRate: 2.5,
+            repeat: -1
+        });
+        // Great white shark swimming.
+        this.anims.create({
+            key: 'gwSharkSwim',
+            frames: this.anims.generateFrameNumbers('gwShark', {
+                start: 0, end: 1
+            }),
+            frameRate: 2.5,
+            repeat: -1
+        });
+        // Great white shark eating.
+        this.anims.create({
+            key: 'gwSharkEat',
+            frames: this.anims.generateFrameNumbers('gwShark', {
+                start: 2, end: 2
             }),
             frameRate: 2.5,
             repeat: -1
@@ -264,7 +285,7 @@ class Three extends Phaser.Scene {
 
 
         this.p1Fish.setScale(0.5);
-        this.p1Fish.anims.play('HammerSwimming');
+        this.p1Fish.anims.play('gwSharkSwim');
 
 
         
@@ -344,6 +365,25 @@ class Three extends Phaser.Scene {
             this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
             this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
         }
+        else if (Phaser.Input.Keyboard.JustDown(THREE)) {
+            this.p1Fish.destroy();
+            this.p1Fish = new GreatWhiteShark(this, this.saveX, this.saveY, "gwShark");
+            this.p1Fish.hurt = this.saveHurt;
+            this.p1Fish.setScale(0.5);
+            this.p1Fish.anims.play('gwSharkSwim');
+            this.p1Fish.lives = this.currLives;
+            this.cameras.main.startFollow(this.p1Fish, true, 1, 1);
+            // set camera dead zone
+            this.cameras.main.setDeadzone(100, 50);
+            this.cameras.main.setName("center");
+
+            this.physics.add.collider(this.p1Fish, this.rockGroup);
+            this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
+            this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
+            this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
+            this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
+        }
 
         for (let i = 0; i < this.BSharksGroup.children.entries.length; i++) {
             this.BSharksGroup.children.entries[i].update();
@@ -357,7 +397,7 @@ class Three extends Phaser.Scene {
             }
         }
         else {
-            numLevelFailed = 2;
+            numLevelFailed = 3;
             this.p1Fish.destroy();
             this.time.delayedCall(2800, () => {
                 this.scene.start("gameOver");
