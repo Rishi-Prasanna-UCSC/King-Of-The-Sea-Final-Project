@@ -9,11 +9,11 @@ class StoryThree extends Phaser.Scene {
 
     create() {
         this.cameras.main.fadeIn(2000, 0, 0, 0);
-        this.add.text(280, 100, "So that's my life story."); 
-        this.add.text(285, 140, "I'm now some puny fish"); 
-        this.add.text(220, 180, "because some magic sea king was pissy.");
-        this.add.text(280, 220, "So, what's next for me?");
-        this.add.text(170, 260, "I'm going to slowly climb back up the food chain, ");
+        this.add.text(200, 100, "And all of a sudden, I'm now a puny little fish."); 
+        this.add.text(250, 140, "Nowhere near the size of what I once was."); 
+        this.add.text(180, 180, "Oh, crumbs and chips, Mister Octopus is proclaimin' \n'imself the new King of the Sea! NO WAY.");
+        this.add.text(180, 220, "Arrrrrrgh, I'm gonna show that tentacle-sucker...");
+        this.add.text(170, 260, "I'm going to slowly climb back up the food chain...");
         this.add.text(180, 300, "and I'll show him what a real king looks like.");
 
         this.input.on('pointerdown', () => {

@@ -10,10 +10,10 @@ class StoryOne extends Phaser.Scene {
     create() {
         // this.time.delayedCall(600, () => {
         this.cameras.main.fadeIn(2000, 0, 0, 0)
-        this.add.text(300, 150, "What am I you ask?");
+        this.add.text(200, 150, "Ahoy, landlubber! What am I, you ask?");
         this.add.text(180, 200, "Well, I was once at the top of the food chain,");
         this.add.text(250, 250, "a king of the sea if you will...");
-        this.add.text(230, 300, "Or so I thought... Where do I begin?");
+        this.add.text(130, 300, "Or so I thought...shiver me timbers, where do I even begin?");
         // }, null, this);
 
         this.input.on('pointerdown', () => {

@@ -28,22 +28,21 @@ class LevelComplete extends Phaser.Scene {
         switch(currLevel) {
             case 1:
                 levelName = "One";
+                this.add.text(100, 200, "Hooray! You can transform into a Hammerhead!\nHammerheads can ram red walls and kill blue sharks by ramming them,\n but ramming blue sharks still hurts! \nUse 2 to switch to a hammerhead. Use 1 to switch back to a fish!\nI can still fit through small cracks as the fish, but not the shark.");
                 this.input.on("pointerdown", () => {
-                    this.add.text(100, 240, "You've unlocked the Hammerhead! Use 1 and 2 to switch between forms.");
                     this.scene.start("levelTwo");
                 });
                 break;
             case 2:
                 levelName = "Two";
-                
+                this.add.text(50, 200, "Yo ho ho! You can transform back into the mighty Great White!\nAs a great white, you can now eat blue sharks AND clams.\nUse 3 to switch to a great white shark.\nUse 2 to be a hammerhead and 1 for fish!\nThe great white shark cannot blast walls, or fit through cracks.");
                 this.input.on("pointerdown", () => {
-                    this.add.text(60, 240, "You've unlocked the Great White! Use 1, 2, and 3 to switch between forms.");
                     this.scene.start("levelThree");
                 });
                 break;
             case 3: 
                 levelName = "Three";
-                this.add.text(60, 240, "Congratulations! You devoured the Sea King and have restored your rule across the Seven Seas!");
+                this.add.text(60, 240, "Congratulations!\nWe devoured the Sea King\n and restored our rule across the Seven Seas!");
                 this.input.on("pointerdown", () => {
                     this.scene.start("victory");
                 });
