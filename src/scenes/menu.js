@@ -158,10 +158,6 @@ class Menu extends Phaser.Scene {
                 this.time.delayedCall(20, () => {
                     this.transitionOptionText(this.tutorial);
     
-                    this.time.delayedCall(20, () => {
-                        this.transitionOptionText(this.credits);
-                    }, null, this);
-    
                 }, null, this);
     
             }, null, this);
