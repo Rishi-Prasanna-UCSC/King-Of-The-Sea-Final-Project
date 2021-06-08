@@ -611,6 +611,7 @@ class Three extends Phaser.Scene {
 
     addLife(fish, gem) {
         if (fish.lives < 3) {
+            this.currLives++;
             fish.lives++;
             fish.lifeNumChanged = true;
         }
