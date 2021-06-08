@@ -43,8 +43,7 @@ class Levels extends Phaser.Scene {
 
 
         this.one.on("pointerdown", () => {
-            this.scene.start("levelOne");
-
+            this.scene.start("storyOne");
         });
 
         this.two.on("pointerdown", () => {
