@@ -42,7 +42,10 @@ class Menu extends Phaser.Scene {
         // Initialize music.
         let music = this.sound.add('MMMusic');
         music.setLoop(true);
-        music.play();
+        if (!playMusic) {
+            music.play();
+            playMusic = true;
+        }
 
         this.bubbleGroup = this.physics.add.group();
 

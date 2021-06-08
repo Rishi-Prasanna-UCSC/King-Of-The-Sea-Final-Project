@@ -27,7 +27,7 @@ let UP, DOWN, RIGHT, LEFT, ONE, TWO, THREE;
 
 // playMusic[0] = main menu music.
 // playMusic[1] = gameplay music.
-let playMusic = [false, false];
+let playMusic = false;
 
 let swimSpeed = 400;
 
