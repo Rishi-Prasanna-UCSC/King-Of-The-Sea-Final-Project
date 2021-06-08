@@ -66,6 +66,7 @@ class Three extends Phaser.Scene {
         this.clamsGroup = this.physics.add.group();
         this.BSharksGroup = this.physics.add.group();
         this.kingGroup = this.physics.add.group();
+        this.coconutGroup = this.physics.add.group();
 
         // Gems
         this.finGemGroup = this.physics.add.group();
@@ -180,10 +181,13 @@ class Three extends Phaser.Scene {
 
 
         this.add.image(3020, 3120, 'Throne').setOrigin(0);
-        this.king = new SeaKing(this, 3220, 3320, "SeaKing");
-        this.king.anims.play('kingSit');
-        this.king.idle = true;
-        this.kingGroup.add(this.king);
+        let king = new SeaKing(this, 3220, 3320, "SeaKing");
+        king.anims.play('kingSit');
+        king.idle = true;
+        this.kingGroup.add(king);
+        king.body.immovable = true;
+        king.body.allowGravity = false;
+
         
 
 
@@ -316,8 +320,17 @@ class Three extends Phaser.Scene {
         this.cameras.main.setName("center");
     }
     update(){
-        this.king.update();
         this.p1Fish.update();
+        for (let i = 0; i < this.kingGroup.children.entries.length; i++) {
+            this.kingGroup.children.entries[i].update();
+        }
+        if (this.kingGroup.children.entries[0].throw) {
+            this.kingGroup.children.entries[0].anims.play('kingThrowCoconut');
+            this.time.delayedCall(500, () => {
+                this.kingGroup.children.entries[0].anims.play('kingSit');
+            }, null, this);
+        }
+
         this.saveX = this.p1Fish.x;
         this.saveY = this.p1Fish.y;
         this.saveHurt = this.p1Fish.hurt;
@@ -338,6 +351,7 @@ class Three extends Phaser.Scene {
             this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
             this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
             this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.collider(this.p1Fish, this.kingGroup, null, this.touchedKing, this);
             this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
             this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
         }
@@ -357,6 +371,7 @@ class Three extends Phaser.Scene {
             this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
             this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
             this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.collider(this.p1Fish, this.kingGroup, null, this.touchedKing, this);
             this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
             this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
         }
@@ -376,6 +391,7 @@ class Three extends Phaser.Scene {
             this.physics.add.collider(this.p1Fish, this.bRockGroup, null, this.breakWall, this);
             this.physics.add.collider(this.p1Fish, this.clamsGroup, null, this.touchedClam, this);
             this.physics.add.collider(this.p1Fish, this.BSharksGroup, null, this.touchedBShark, this);
+            this.physics.add.collider(this.p1Fish, this.kingGroup, null, this.touchedKing, this);
             this.physics.add.overlap(this.p1Fish, this.finGemGroup, null, this.touchedFinish, this);
             this.physics.add.overlap(this.p1Fish, this.helGemGroup, null, this.addLife, this);
         }

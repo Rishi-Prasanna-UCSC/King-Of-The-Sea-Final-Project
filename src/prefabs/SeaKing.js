@@ -8,6 +8,7 @@ class SeaKing extends Phaser.GameObjects.Sprite {
         this.idlePeriod = 0;
         this.originalY = this.y;
         this.hurt = 0;
+        this.throw = false;
     }
 
     update(){
@@ -21,6 +22,9 @@ class SeaKing extends Phaser.GameObjects.Sprite {
             else if ((this.hurt % 4 == 2) || (this.hurt % 4 == 3)) {
                 this.setVisible(false);
             }
+        }
+        if (this.idlePeriod % 210 == 0) {
+            this.throw = true;
         }
 
         if (this.idlePeriod % 60 == 0) {
